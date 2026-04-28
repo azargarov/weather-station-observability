@@ -1,0 +1,20 @@
+groups:
+  - name: node-alerts
+    rules:
+      - alert: ProxmoxHostDown
+        expr: up{job="proxmox-node"} == 0
+        for: 2m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Proxmox host is down"
+          description: "Prometheus cannot scrape the Proxmox node exporter."
+
+      - alert: LowDiskSpace
+        expr: (node_filesystem_avail_bytes{fstype!~"tmpfs|overlay"} / node_filesystem_size_bytes{fstype!~"tmpfs|overlay"}) < 0.15
+        for: 10m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Low disk space"
+          description: "Filesystem has less than 15% free space."

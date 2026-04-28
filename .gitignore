@@ -1,0 +1,11 @@
+.env
+.env.*
+!.env.example
+
+secrets/
+generated/
+
+prometheus/pve.yml
+prometheus/targets/*.local.yml
+
+bak
