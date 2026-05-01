@@ -2,13 +2,13 @@
   "apiVersion": "dashboard.grafana.app/v2",
   "kind": "Dashboard",
   "metadata": {
-    "name": "esp32-weather-multi-device",
+    "name": "esp32-weather-multi-device-aggregated",
     "namespace": "default",
-    "uid": "93e4bbd7-fad1-404b-8020-2d4c80d49d2b",
-    "resourceVersion": "1777324335464005",
-    "generation": 7,
-    "creationTimestamp": "2026-04-27T20:20:32Z",
+    "resourceVersion": "1777664947029988",
+    "generation": 5,
+    "creationTimestamp": "2026-05-01T19:15:43Z",
     "labels": {
+      "grafana.app/deprecatedInternalID": "1155275335180288"
     },
     "annotations": {
     }
@@ -135,8 +135,8 @@
         "kind": "Panel",
         "spec": {
           "id": 10,
-          "title": "Living room minus balcony humidity",
-          "description": "Positive value means the living room humidity is higher than the balcony.",
+          "title": "Living room minus balcony humidity avg",
+          "description": "Positive value means the living room 60-second average humidity is higher than the balcony.",
           "links": [],
           "data": {
             "kind": "QueryGroup",
@@ -154,7 +154,7 @@
                       },
                       "spec": {
                         "editorMode": "code",
-                        "expr": "avg(esp32_sensor_humidity{job=\"esp32\", room=\"livingroom\"}) - avg(esp32_sensor_humidity{job=\"esp32\", room=\"balcony\"})",
+                        "expr": "avg(esp32_sensor_humidity_avg_60s{job=\"esp32\", room=\"livingroom\"}) - avg(esp32_sensor_humidity_avg_60s{job=\"esp32\", room=\"balcony\"})",
                         "instant": false,
                         "legendFormat": "Δ livingroom-balcony",
                         "range": true
@@ -1269,8 +1269,8 @@
         "kind": "Panel",
         "spec": {
           "id": 2,
-          "title": "Temperature now",
-          "description": "Current temperature per device.",
+          "title": "Temperature avg 60s",
+          "description": "Average temperature from the previous 60-second aggregation bucket.",
           "links": [],
           "data": {
             "kind": "QueryGroup",
@@ -1288,7 +1288,7 @@
                       },
                       "spec": {
                         "editorMode": "code",
-                        "expr": "esp32_sensor_temperature{job=\"esp32\", device=~\"$device\", room=~\"$room\", instance=~\"$instance\"}",
+                        "expr": "esp32_sensor_temperature_avg_60s{job=\"esp32\", device=~\"$device\", room=~\"$room\", instance=~\"$instance\"}",
                         "instant": true,
                         "legendFormat": "{{device}} / {{room}}",
                         "range": false
@@ -1368,8 +1368,8 @@
         "kind": "Panel",
         "spec": {
           "id": 20,
-          "title": "Temperature change rate",
-          "description": "Rate of temperature change in °C per hour.",
+          "title": "Temperature avg change rate",
+          "description": "Rate of change based on 60-second average temperature, in °C per hour.",
           "links": [],
           "data": {
             "kind": "QueryGroup",
@@ -1387,7 +1387,7 @@
                       },
                       "spec": {
                         "editorMode": "code",
-                        "expr": "deriv(esp32_sensor_temperature{job=\"esp32\", device=~\"$device\", room=~\"$room\", instance=~\"$instance\"}[15m]) * 3600",
+                        "expr": "deriv(esp32_sensor_temperature_avg_60s{job=\"esp32\", device=~\"$device\", room=~\"$room\", instance=~\"$instance\"}[15m]) * 3600",
                         "instant": false,
                         "legendFormat": "{{device}} / {{room}}",
                         "range": true
@@ -1489,8 +1489,8 @@
         "kind": "Panel",
         "spec": {
           "id": 21,
-          "title": "Humidity change rate",
-          "description": "Rate of humidity change in percent points per hour.",
+          "title": "Humidity avg change rate",
+          "description": "Rate of change based on 60-second average humidity, in percentage points per hour.",
           "links": [],
           "data": {
             "kind": "QueryGroup",
@@ -1508,7 +1508,7 @@
                       },
                       "spec": {
                         "editorMode": "code",
-                        "expr": "deriv(esp32_sensor_humidity{job=\"esp32\", device=~\"$device\", room=~\"$room\", instance=~\"$instance\"}[15m]) * 3600",
+                        "expr": "deriv(esp32_sensor_humidity_avg_60s{job=\"esp32\", device=~\"$device\", room=~\"$room\", instance=~\"$instance\"}[15m]) * 3600",
                         "instant": false,
                         "legendFormat": "{{device}} / {{room}}",
                         "range": true
@@ -1610,8 +1610,8 @@
         "kind": "Panel",
         "spec": {
           "id": 22,
-          "title": "Pressure trend",
-          "description": "Pressure change rate in mmHg per hour.",
+          "title": "Pressure avg trend",
+          "description": "Pressure change rate based on 60-second average pressure, in mmHg per hour.",
           "links": [],
           "data": {
             "kind": "QueryGroup",
@@ -1629,7 +1629,7 @@
                       },
                       "spec": {
                         "editorMode": "code",
-                        "expr": "deriv(esp32_sensor_pressure{job=\"esp32\", device=~\"$device\", room=~\"$room\", instance=~\"$instance\"}[30m]) / 1.33322387415 * 3600",
+                        "expr": "deriv(esp32_sensor_pressure_avg_60s{job=\"esp32\", device=~\"$device\", room=~\"$room\", instance=~\"$instance\"}[30m]) / 1.33322387415 * 3600",
                         "instant": false,
                         "legendFormat": "{{device}} / {{room}}",
                         "range": true
@@ -1730,8 +1730,8 @@
         "kind": "Panel",
         "spec": {
           "id": 23,
-          "title": "Temperature spread between selected devices",
-          "description": "Difference between the warmest and coldest selected sensors.",
+          "title": "Temperature avg spread between selected devices",
+          "description": "Difference between the warmest and coldest selected sensors using 60-second averages.",
           "links": [],
           "data": {
             "kind": "QueryGroup",
@@ -1749,7 +1749,7 @@
                       },
                       "spec": {
                         "editorMode": "code",
-                        "expr": "max(esp32_sensor_temperature{job=\"esp32\", device=~\"$device\", room=~\"$room\", instance=~\"$instance\"}) - min(esp32_sensor_temperature{job=\"esp32\", device=~\"$device\", room=~\"$room\", instance=~\"$instance\"})",
+                        "expr": "max(esp32_sensor_temperature_avg_60s{job=\"esp32\", device=~\"$device\", room=~\"$room\", instance=~\"$instance\"}) - min(esp32_sensor_temperature_avg_60s{job=\"esp32\", device=~\"$device\", room=~\"$room\", instance=~\"$instance\"})",
                         "instant": false,
                         "legendFormat": "max-min",
                         "range": true
@@ -1851,8 +1851,8 @@
         "kind": "Panel",
         "spec": {
           "id": 24,
-          "title": "Humidity spread between selected devices",
-          "description": "Difference between the most and least humid selected sensors.",
+          "title": "Humidity avg spread between selected devices",
+          "description": "Difference between the most and least humid selected sensors using 60-second averages.",
           "links": [],
           "data": {
             "kind": "QueryGroup",
@@ -1870,7 +1870,7 @@
                       },
                       "spec": {
                         "editorMode": "code",
-                        "expr": "max(esp32_sensor_humidity{job=\"esp32\", device=~\"$device\", room=~\"$room\", instance=~\"$instance\"}) - min(esp32_sensor_humidity{job=\"esp32\", device=~\"$device\", room=~\"$room\", instance=~\"$instance\"})",
+                        "expr": "max(esp32_sensor_humidity_avg_60s{job=\"esp32\", device=~\"$device\", room=~\"$room\", instance=~\"$instance\"}) - min(esp32_sensor_humidity_avg_60s{job=\"esp32\", device=~\"$device\", room=~\"$room\", instance=~\"$instance\"})",
                         "instant": false,
                         "legendFormat": "max-min",
                         "range": true
@@ -1972,8 +1972,8 @@
         "kind": "Panel",
         "spec": {
           "id": 25,
-          "title": "Indoor comfort humidity band",
-          "description": "Living room humidity. Practical comfort band is usually around 40–60%.",
+          "title": "Indoor comfort humidity avg band",
+          "description": "Living room 60-second average humidity. Practical comfort band is usually around 40–60%.",
           "links": [],
           "data": {
             "kind": "QueryGroup",
@@ -1991,7 +1991,7 @@
                       },
                       "spec": {
                         "editorMode": "code",
-                        "expr": "esp32_sensor_humidity{job=\"esp32\", room=\"livingroom\"}",
+                        "expr": "esp32_sensor_humidity_avg_60s{job=\"esp32\", room=\"livingroom\"}",
                         "instant": false,
                         "legendFormat": "livingroom",
                         "range": true
@@ -2089,12 +2089,12 @@
           }
         }
       },
-      "panel-3": {
+      "panel-26": {
         "kind": "Panel",
         "spec": {
-          "id": 3,
-          "title": "Humidity now",
-          "description": "Current relative humidity per device.",
+          "id": 26,
+          "title": "Temperature stddev 60s by device",
+          "description": "Standard deviation of temperature inside each 60-second bucket. Higher values mean less stable readings or a real short-term disturbance.",
           "links": [],
           "data": {
             "kind": "QueryGroup",
@@ -2112,7 +2112,491 @@
                       },
                       "spec": {
                         "editorMode": "code",
-                        "expr": "esp32_sensor_humidity{job=\"esp32\", device=~\"$device\", room=~\"$room\", instance=~\"$instance\"}",
+                        "expr": "esp32_sensor_temperature_stddev_60s{job=\"esp32\", device=~\"$device\", room=~\"$room\", instance=~\"$instance\"}",
+                        "instant": false,
+                        "legendFormat": "{{device}} / {{room}}",
+                        "range": true
+                      }
+                    },
+                    "refId": "A",
+                    "hidden": false
+                  }
+                }
+              ],
+              "transformations": [],
+              "queryOptions": {}
+            }
+          },
+          "vizConfig": {
+            "kind": "VizConfig",
+            "group": "timeseries",
+            "version": "13.0.1",
+            "spec": {
+              "options": {
+                "annotations": {
+                  "clustering": -1,
+                  "multiLane": false
+                },
+                "legend": {
+                  "calcs": [
+                    "lastNotNull",
+                    "min",
+                    "max"
+                  ],
+                  "displayMode": "table",
+                  "placement": "bottom",
+                  "showLegend": true
+                },
+                "tooltip": {
+                  "hideZeros": false,
+                  "mode": "multi",
+                  "sort": "none"
+                }
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "unit": "celsius",
+                  "decimals": 3,
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "value": 0,
+                        "color": "green"
+                      }
+                    ]
+                  },
+                  "color": {
+                    "mode": "palette-classic"
+                  },
+                  "custom": {
+                    "axisBorderShow": false,
+                    "axisCenteredZero": false,
+                    "axisColorMode": "text",
+                    "axisLabel": "°C stddev",
+                    "axisPlacement": "auto",
+                    "barAlignment": 0,
+                    "barWidthFactor": 0.6,
+                    "drawStyle": "line",
+                    "fillOpacity": 6,
+                    "gradientMode": "none",
+                    "hideFrom": {
+                      "legend": false,
+                      "tooltip": false,
+                      "viz": false
+                    },
+                    "insertNulls": false,
+                    "lineInterpolation": "linear",
+                    "lineWidth": 2,
+                    "pointSize": 3,
+                    "scaleDistribution": {
+                      "type": "linear"
+                    },
+                    "showPoints": "auto",
+                    "showValues": false,
+                    "spanNulls": false,
+                    "stacking": {
+                      "group": "A",
+                      "mode": "none"
+                    },
+                    "thresholdsStyle": {
+                      "mode": "off"
+                    }
+                  }
+                },
+                "overrides": []
+              }
+            }
+          }
+        }
+      },
+      "panel-27": {
+        "kind": "Panel",
+        "spec": {
+          "id": 27,
+          "title": "Humidity stddev 60s by device",
+          "description": "Standard deviation of relative humidity inside each 60-second bucket.",
+          "links": [],
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "prometheus",
+                      "version": "v0",
+                      "datasource": {
+                        "name": "prometheus"
+                      },
+                      "spec": {
+                        "editorMode": "code",
+                        "expr": "esp32_sensor_humidity_stddev_60s{job=\"esp32\", device=~\"$device\", room=~\"$room\", instance=~\"$instance\"}",
+                        "instant": false,
+                        "legendFormat": "{{device}} / {{room}}",
+                        "range": true
+                      }
+                    },
+                    "refId": "A",
+                    "hidden": false
+                  }
+                }
+              ],
+              "transformations": [],
+              "queryOptions": {}
+            }
+          },
+          "vizConfig": {
+            "kind": "VizConfig",
+            "group": "timeseries",
+            "version": "13.0.1",
+            "spec": {
+              "options": {
+                "annotations": {
+                  "clustering": -1,
+                  "multiLane": false
+                },
+                "legend": {
+                  "calcs": [
+                    "lastNotNull",
+                    "min",
+                    "max"
+                  ],
+                  "displayMode": "table",
+                  "placement": "bottom",
+                  "showLegend": true
+                },
+                "tooltip": {
+                  "hideZeros": false,
+                  "mode": "multi",
+                  "sort": "none"
+                }
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "unit": "percent",
+                  "decimals": 3,
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "value": 0,
+                        "color": "green"
+                      }
+                    ]
+                  },
+                  "color": {
+                    "mode": "palette-classic"
+                  },
+                  "custom": {
+                    "axisBorderShow": false,
+                    "axisCenteredZero": false,
+                    "axisColorMode": "text",
+                    "axisLabel": "% stddev",
+                    "axisPlacement": "auto",
+                    "barAlignment": 0,
+                    "barWidthFactor": 0.6,
+                    "drawStyle": "line",
+                    "fillOpacity": 6,
+                    "gradientMode": "none",
+                    "hideFrom": {
+                      "legend": false,
+                      "tooltip": false,
+                      "viz": false
+                    },
+                    "insertNulls": false,
+                    "lineInterpolation": "linear",
+                    "lineWidth": 2,
+                    "pointSize": 3,
+                    "scaleDistribution": {
+                      "type": "linear"
+                    },
+                    "showPoints": "auto",
+                    "showValues": false,
+                    "spanNulls": false,
+                    "stacking": {
+                      "group": "A",
+                      "mode": "none"
+                    },
+                    "thresholdsStyle": {
+                      "mode": "off"
+                    }
+                  }
+                },
+                "overrides": []
+              }
+            }
+          }
+        }
+      },
+      "panel-28": {
+        "kind": "Panel",
+        "spec": {
+          "id": 28,
+          "title": "Pressure stddev 60s by device",
+          "description": "Standard deviation of pressure inside each 60-second bucket, converted from hPa to mmHg.",
+          "links": [],
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "prometheus",
+                      "version": "v0",
+                      "datasource": {
+                        "name": "prometheus"
+                      },
+                      "spec": {
+                        "editorMode": "code",
+                        "expr": "esp32_sensor_pressure_stddev_60s{job=\"esp32\", device=~\"$device\", room=~\"$room\", instance=~\"$instance\"} / 1.33322387415",
+                        "instant": false,
+                        "legendFormat": "{{device}} / {{room}}",
+                        "range": true
+                      }
+                    },
+                    "refId": "A",
+                    "hidden": false
+                  }
+                }
+              ],
+              "transformations": [],
+              "queryOptions": {}
+            }
+          },
+          "vizConfig": {
+            "kind": "VizConfig",
+            "group": "timeseries",
+            "version": "13.0.1",
+            "spec": {
+              "options": {
+                "annotations": {
+                  "clustering": -1,
+                  "multiLane": false
+                },
+                "legend": {
+                  "calcs": [
+                    "lastNotNull",
+                    "min",
+                    "max"
+                  ],
+                  "displayMode": "table",
+                  "placement": "bottom",
+                  "showLegend": true
+                },
+                "tooltip": {
+                  "hideZeros": false,
+                  "mode": "multi",
+                  "sort": "none"
+                }
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "unit": "mmHg",
+                  "decimals": 4,
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "value": 0,
+                        "color": "green"
+                      }
+                    ]
+                  },
+                  "color": {
+                    "mode": "palette-classic"
+                  },
+                  "custom": {
+                    "axisBorderShow": false,
+                    "axisCenteredZero": false,
+                    "axisColorMode": "text",
+                    "axisLabel": "mmHg stddev",
+                    "axisPlacement": "auto",
+                    "barAlignment": 0,
+                    "barWidthFactor": 0.6,
+                    "drawStyle": "line",
+                    "fillOpacity": 6,
+                    "gradientMode": "none",
+                    "hideFrom": {
+                      "legend": false,
+                      "tooltip": false,
+                      "viz": false
+                    },
+                    "insertNulls": false,
+                    "lineInterpolation": "linear",
+                    "lineWidth": 2,
+                    "pointSize": 3,
+                    "scaleDistribution": {
+                      "type": "linear"
+                    },
+                    "showPoints": "auto",
+                    "showValues": false,
+                    "spanNulls": false,
+                    "stacking": {
+                      "group": "A",
+                      "mode": "none"
+                    },
+                    "thresholdsStyle": {
+                      "mode": "off"
+                    }
+                  }
+                },
+                "overrides": []
+              }
+            }
+          }
+        }
+      },
+      "panel-29": {
+        "kind": "Panel",
+        "spec": {
+          "id": 29,
+          "title": "BME280 samples per 60s bucket",
+          "description": "Number of valid BME280 samples used to calculate each 60-second average. With 5-second reads this should be around 12; with 1-second reads around 60.",
+          "links": [],
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "prometheus",
+                      "version": "v0",
+                      "datasource": {
+                        "name": "prometheus"
+                      },
+                      "spec": {
+                        "editorMode": "code",
+                        "expr": "esp32_sensor_bme280_samples_60s{job=\"esp32\", device=~\"$device\", room=~\"$room\", instance=~\"$instance\"}",
+                        "instant": false,
+                        "legendFormat": "{{device}} / {{room}}",
+                        "range": true
+                      }
+                    },
+                    "refId": "A",
+                    "hidden": false
+                  }
+                }
+              ],
+              "transformations": [],
+              "queryOptions": {}
+            }
+          },
+          "vizConfig": {
+            "kind": "VizConfig",
+            "group": "timeseries",
+            "version": "13.0.1",
+            "spec": {
+              "options": {
+                "annotations": {
+                  "clustering": -1,
+                  "multiLane": false
+                },
+                "legend": {
+                  "calcs": [
+                    "lastNotNull",
+                    "min",
+                    "max"
+                  ],
+                  "displayMode": "table",
+                  "placement": "bottom",
+                  "showLegend": true
+                },
+                "tooltip": {
+                  "hideZeros": false,
+                  "mode": "multi",
+                  "sort": "none"
+                }
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "unit": "none",
+                  "decimals": 0,
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "value": 0,
+                        "color": "green"
+                      }
+                    ]
+                  },
+                  "color": {
+                    "mode": "palette-classic"
+                  },
+                  "custom": {
+                    "axisBorderShow": false,
+                    "axisCenteredZero": false,
+                    "axisColorMode": "text",
+                    "axisLabel": "samples",
+                    "axisPlacement": "auto",
+                    "barAlignment": 0,
+                    "barWidthFactor": 0.6,
+                    "drawStyle": "line",
+                    "fillOpacity": 6,
+                    "gradientMode": "none",
+                    "hideFrom": {
+                      "legend": false,
+                      "tooltip": false,
+                      "viz": false
+                    },
+                    "insertNulls": false,
+                    "lineInterpolation": "linear",
+                    "lineWidth": 2,
+                    "pointSize": 3,
+                    "scaleDistribution": {
+                      "type": "linear"
+                    },
+                    "showPoints": "auto",
+                    "showValues": false,
+                    "spanNulls": false,
+                    "stacking": {
+                      "group": "A",
+                      "mode": "none"
+                    },
+                    "thresholdsStyle": {
+                      "mode": "off"
+                    }
+                  }
+                },
+                "overrides": []
+              }
+            }
+          }
+        }
+      },
+      "panel-3": {
+        "kind": "Panel",
+        "spec": {
+          "id": 3,
+          "title": "Humidity avg 60s",
+          "description": "Average relative humidity from the previous 60-second aggregation bucket.",
+          "links": [],
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "prometheus",
+                      "version": "v0",
+                      "datasource": {
+                        "name": "prometheus"
+                      },
+                      "spec": {
+                        "editorMode": "code",
+                        "expr": "esp32_sensor_humidity_avg_60s{job=\"esp32\", device=~\"$device\", room=~\"$room\", instance=~\"$instance\"}",
                         "instant": true,
                         "legendFormat": "{{device}} / {{room}}",
                         "range": false
@@ -2188,12 +2672,12 @@
           }
         }
       },
-      "panel-4": {
+      "panel-30": {
         "kind": "Panel",
         "spec": {
-          "id": 4,
-          "title": "Pressure now",
-          "description": "Current pressure converted from hPa to mmHg.",
+          "id": 30,
+          "title": "BME280 read errors total",
+          "description": "Cumulative BME280 read errors reported by the firmware.",
           "links": [],
           "data": {
             "kind": "QueryGroup",
@@ -2211,7 +2695,367 @@
                       },
                       "spec": {
                         "editorMode": "code",
-                        "expr": "esp32_sensor_pressure{job=\"esp32\", device=~\"$device\", room=~\"$room\", instance=~\"$instance\"} / 1.33322387415",
+                        "expr": "esp32_sensor_bme280_read_errors_total{job=\"esp32\", device=~\"$device\", room=~\"$room\", instance=~\"$instance\"}",
+                        "instant": false,
+                        "legendFormat": "{{device}} / {{room}}",
+                        "range": true
+                      }
+                    },
+                    "refId": "A",
+                    "hidden": false
+                  }
+                }
+              ],
+              "transformations": [],
+              "queryOptions": {}
+            }
+          },
+          "vizConfig": {
+            "kind": "VizConfig",
+            "group": "timeseries",
+            "version": "13.0.1",
+            "spec": {
+              "options": {
+                "annotations": {
+                  "clustering": -1,
+                  "multiLane": false
+                },
+                "legend": {
+                  "calcs": [
+                    "lastNotNull",
+                    "min",
+                    "max"
+                  ],
+                  "displayMode": "table",
+                  "placement": "bottom",
+                  "showLegend": true
+                },
+                "tooltip": {
+                  "hideZeros": false,
+                  "mode": "multi",
+                  "sort": "none"
+                }
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "unit": "none",
+                  "decimals": 0,
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "value": 0,
+                        "color": "green"
+                      }
+                    ]
+                  },
+                  "color": {
+                    "mode": "palette-classic"
+                  },
+                  "custom": {
+                    "axisBorderShow": false,
+                    "axisCenteredZero": false,
+                    "axisColorMode": "text",
+                    "axisLabel": "errors",
+                    "axisPlacement": "auto",
+                    "barAlignment": 0,
+                    "barWidthFactor": 0.6,
+                    "drawStyle": "line",
+                    "fillOpacity": 6,
+                    "gradientMode": "none",
+                    "hideFrom": {
+                      "legend": false,
+                      "tooltip": false,
+                      "viz": false
+                    },
+                    "insertNulls": false,
+                    "lineInterpolation": "linear",
+                    "lineWidth": 2,
+                    "pointSize": 3,
+                    "scaleDistribution": {
+                      "type": "linear"
+                    },
+                    "showPoints": "auto",
+                    "showValues": false,
+                    "spanNulls": false,
+                    "stacking": {
+                      "group": "A",
+                      "mode": "none"
+                    },
+                    "thresholdsStyle": {
+                      "mode": "off"
+                    }
+                  }
+                },
+                "overrides": []
+              }
+            }
+          }
+        }
+      },
+      "panel-31": {
+        "kind": "Panel",
+        "spec": {
+          "id": 31,
+          "title": "Metrics build duration, ms",
+          "description": "",
+          "links": [],
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "prometheus",
+                      "version": "v0",
+                      "datasource": {
+                        "name": "prometheus"
+                      },
+                      "spec": {
+                        "editorMode": "code",
+                        "expr": "esp32_metrics_build_duration_ms",
+                        "legendFormat": "{{room}}",
+                        "range": true
+                      }
+                    },
+                    "refId": "A",
+                    "hidden": false
+                  }
+                }
+              ],
+              "transformations": [],
+              "queryOptions": {}
+            }
+          },
+          "vizConfig": {
+            "kind": "VizConfig",
+            "group": "timeseries",
+            "version": "13.0.1",
+            "spec": {
+              "options": {
+                "annotations": {
+                  "clustering": -1,
+                  "multiLane": false
+                },
+                "legend": {
+                  "calcs": [],
+                  "displayMode": "list",
+                  "placement": "bottom",
+                  "showLegend": true
+                },
+                "tooltip": {
+                  "hideZeros": false,
+                  "mode": "single",
+                  "sort": "none"
+                }
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "unit": "ms",
+                  "min": 0,
+                  "max": 10,
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "value": 0,
+                        "color": "green"
+                      },
+                      {
+                        "value": 10,
+                        "color": "red"
+                      }
+                    ]
+                  },
+                  "color": {
+                    "mode": "palette-classic"
+                  },
+                  "custom": {
+                    "axisBorderShow": false,
+                    "axisCenteredZero": false,
+                    "axisColorMode": "text",
+                    "axisLabel": "",
+                    "axisPlacement": "auto",
+                    "barAlignment": 0,
+                    "barWidthFactor": 0.6,
+                    "drawStyle": "line",
+                    "fillOpacity": 0,
+                    "gradientMode": "none",
+                    "hideFrom": {
+                      "legend": false,
+                      "tooltip": false,
+                      "viz": false
+                    },
+                    "insertNulls": false,
+                    "lineInterpolation": "linear",
+                    "lineWidth": 1,
+                    "pointSize": 5,
+                    "scaleDistribution": {
+                      "type": "linear"
+                    },
+                    "showPoints": "auto",
+                    "showValues": false,
+                    "spanNulls": false,
+                    "stacking": {
+                      "group": "A",
+                      "mode": "none"
+                    },
+                    "thresholdsStyle": {
+                      "mode": "off"
+                    }
+                  }
+                },
+                "overrides": []
+              }
+            }
+          }
+        }
+      },
+      "panel-32": {
+        "kind": "Panel",
+        "spec": {
+          "id": 32,
+          "title": "New panel",
+          "description": "",
+          "links": [],
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "prometheus",
+                      "version": "v0",
+                      "datasource": {
+                        "name": "prometheus"
+                      },
+                      "spec": {
+                        "editorMode": "code",
+                        "expr": "scrape_duration_seconds{device=~\"esp32-balcony|esp32-livingroom\"}",
+                        "legendFormat": "__auto",
+                        "range": true
+                      }
+                    },
+                    "refId": "A",
+                    "hidden": false
+                  }
+                }
+              ],
+              "transformations": [],
+              "queryOptions": {}
+            }
+          },
+          "vizConfig": {
+            "kind": "VizConfig",
+            "group": "timeseries",
+            "version": "13.0.1",
+            "spec": {
+              "options": {
+                "annotations": {
+                  "clustering": -1,
+                  "multiLane": false
+                },
+                "legend": {
+                  "calcs": [],
+                  "displayMode": "list",
+                  "placement": "bottom",
+                  "showLegend": true
+                },
+                "tooltip": {
+                  "hideZeros": false,
+                  "mode": "single",
+                  "sort": "none"
+                }
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "value": 0,
+                        "color": "green"
+                      },
+                      {
+                        "value": 80,
+                        "color": "red"
+                      }
+                    ]
+                  },
+                  "color": {
+                    "mode": "palette-classic"
+                  },
+                  "custom": {
+                    "axisBorderShow": false,
+                    "axisCenteredZero": false,
+                    "axisColorMode": "text",
+                    "axisLabel": "",
+                    "axisPlacement": "auto",
+                    "barAlignment": 0,
+                    "barWidthFactor": 0.6,
+                    "drawStyle": "line",
+                    "fillOpacity": 0,
+                    "gradientMode": "none",
+                    "hideFrom": {
+                      "legend": false,
+                      "tooltip": false,
+                      "viz": false
+                    },
+                    "insertNulls": false,
+                    "lineInterpolation": "linear",
+                    "lineWidth": 1,
+                    "pointSize": 5,
+                    "scaleDistribution": {
+                      "type": "linear"
+                    },
+                    "showPoints": "auto",
+                    "showValues": false,
+                    "spanNulls": false,
+                    "stacking": {
+                      "group": "A",
+                      "mode": "none"
+                    },
+                    "thresholdsStyle": {
+                      "mode": "off"
+                    }
+                  }
+                },
+                "overrides": []
+              }
+            }
+          }
+        }
+      },
+      "panel-4": {
+        "kind": "Panel",
+        "spec": {
+          "id": 4,
+          "title": "Pressure avg 60s",
+          "description": "Average pressure from the previous 60-second aggregation bucket, converted from hPa to mmHg.",
+          "links": [],
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "prometheus",
+                      "version": "v0",
+                      "datasource": {
+                        "name": "prometheus"
+                      },
+                      "spec": {
+                        "editorMode": "code",
+                        "expr": "esp32_sensor_pressure_avg_60s{job=\"esp32\", device=~\"$device\", room=~\"$room\", instance=~\"$instance\"} / 1.33322387415",
                         "instant": true,
                         "legendFormat": "{{device}} / {{room}}",
                         "range": false
@@ -2250,7 +3094,7 @@
               },
               "fieldConfig": {
                 "defaults": {
-                  "unit": "pressuremmhg",
+                  "unit": "mmHg",
                   "decimals": 1,
                   "thresholds": {
                     "mode": "absolute",
@@ -2291,8 +3135,8 @@
         "kind": "Panel",
         "spec": {
           "id": 5,
-          "title": "Temperature by device",
-          "description": "Raw temperature from each ESP32 sensor.",
+          "title": "Temperature avg by device",
+          "description": "60-second average temperature from each ESP32 sensor.",
           "links": [],
           "data": {
             "kind": "QueryGroup",
@@ -2310,7 +3154,7 @@
                       },
                       "spec": {
                         "editorMode": "code",
-                        "expr": "esp32_sensor_temperature{job=\"esp32\", device=~\"$device\", room=~\"$room\", instance=~\"$instance\"}",
+                        "expr": "esp32_sensor_temperature_avg_60s{job=\"esp32\", device=~\"$device\", room=~\"$room\", instance=~\"$instance\"}",
                         "instant": false,
                         "legendFormat": "{{device}} / {{room}}",
                         "range": true
@@ -2412,8 +3256,8 @@
         "kind": "Panel",
         "spec": {
           "id": 6,
-          "title": "Humidity by device",
-          "description": "Relative humidity from each ESP32 sensor.",
+          "title": "Humidity avg by device",
+          "description": "60-second average relative humidity from each ESP32 sensor.",
           "links": [],
           "data": {
             "kind": "QueryGroup",
@@ -2431,7 +3275,7 @@
                       },
                       "spec": {
                         "editorMode": "code",
-                        "expr": "esp32_sensor_humidity{job=\"esp32\", device=~\"$device\", room=~\"$room\", instance=~\"$instance\"}",
+                        "expr": "esp32_sensor_humidity_avg_60s{job=\"esp32\", device=~\"$device\", room=~\"$room\", instance=~\"$instance\"}",
                         "instant": false,
                         "legendFormat": "{{device}} / {{room}}",
                         "range": true
@@ -2533,8 +3377,8 @@
         "kind": "Panel",
         "spec": {
           "id": 7,
-          "title": "Pressure by device",
-          "description": "Pressure converted from hPa to mmHg.",
+          "title": "Pressure avg by device",
+          "description": "60-second average pressure converted from hPa to mmHg.",
           "links": [],
           "data": {
             "kind": "QueryGroup",
@@ -2552,7 +3396,7 @@
                       },
                       "spec": {
                         "editorMode": "code",
-                        "expr": "esp32_sensor_pressure{job=\"esp32\", device=~\"$device\", room=~\"$room\", instance=~\"$instance\"} / 1.33322387415",
+                        "expr": "esp32_sensor_pressure_avg_60s{job=\"esp32\", device=~\"$device\", room=~\"$room\", instance=~\"$instance\"} / 1.33322387415",
                         "instant": false,
                         "legendFormat": "{{device}} / {{room}}",
                         "range": true
@@ -2653,8 +3497,8 @@
         "kind": "Panel",
         "spec": {
           "id": 9,
-          "title": "Living room minus balcony temperature",
-          "description": "Positive value means the living room is warmer than the balcony.",
+          "title": "Living room minus balcony temperature avg",
+          "description": "Positive value means the living room 60-second average temperature is higher than the balcony.",
           "links": [],
           "data": {
             "kind": "QueryGroup",
@@ -2672,7 +3516,7 @@
                       },
                       "spec": {
                         "editorMode": "code",
-                        "expr": "avg(esp32_sensor_temperature{job=\"esp32\", room=\"livingroom\"}) - avg(esp32_sensor_temperature{job=\"esp32\", room=\"balcony\"})",
+                        "expr": "avg(esp32_sensor_temperature_avg_60s{job=\"esp32\", room=\"livingroom\"}) - avg(esp32_sensor_temperature_avg_60s{job=\"esp32\", room=\"balcony\"})",
                         "instant": false,
                         "legendFormat": "Δ livingroom-balcony",
                         "range": true
@@ -2775,136 +3619,6 @@
       "kind": "TabsLayout",
       "spec": {
         "tabs": [
-          {
-            "kind": "TabsLayoutTab",
-            "spec": {
-              "title": "Overview",
-              "layout": {
-                "kind": "GridLayout",
-                "spec": {
-                  "items": [
-                    {
-                      "kind": "GridLayoutItem",
-                      "spec": {
-                        "x": 0,
-                        "y": 0,
-                        "width": 6,
-                        "height": 4,
-                        "element": {
-                          "kind": "ElementReference",
-                          "name": "panel-1"
-                        }
-                      }
-                    },
-                    {
-                      "kind": "GridLayoutItem",
-                      "spec": {
-                        "x": 6,
-                        "y": 0,
-                        "width": 6,
-                        "height": 4,
-                        "element": {
-                          "kind": "ElementReference",
-                          "name": "panel-2"
-                        }
-                      }
-                    },
-                    {
-                      "kind": "GridLayoutItem",
-                      "spec": {
-                        "x": 12,
-                        "y": 0,
-                        "width": 6,
-                        "height": 4,
-                        "element": {
-                          "kind": "ElementReference",
-                          "name": "panel-3"
-                        }
-                      }
-                    },
-                    {
-                      "kind": "GridLayoutItem",
-                      "spec": {
-                        "x": 18,
-                        "y": 0,
-                        "width": 6,
-                        "height": 4,
-                        "element": {
-                          "kind": "ElementReference",
-                          "name": "panel-4"
-                        }
-                      }
-                    },
-                    {
-                      "kind": "GridLayoutItem",
-                      "spec": {
-                        "x": 0,
-                        "y": 4,
-                        "width": 12,
-                        "height": 8,
-                        "element": {
-                          "kind": "ElementReference",
-                          "name": "panel-5"
-                        }
-                      }
-                    },
-                    {
-                      "kind": "GridLayoutItem",
-                      "spec": {
-                        "x": 12,
-                        "y": 4,
-                        "width": 12,
-                        "height": 8,
-                        "element": {
-                          "kind": "ElementReference",
-                          "name": "panel-6"
-                        }
-                      }
-                    },
-                    {
-                      "kind": "GridLayoutItem",
-                      "spec": {
-                        "x": 0,
-                        "y": 12,
-                        "width": 12,
-                        "height": 8,
-                        "element": {
-                          "kind": "ElementReference",
-                          "name": "panel-7"
-                        }
-                      }
-                    },
-                    {
-                      "kind": "GridLayoutItem",
-                      "spec": {
-                        "x": 12,
-                        "y": 12,
-                        "width": 12,
-                        "height": 8,
-                        "element": {
-                          "kind": "ElementReference",
-                          "name": "panel-10"
-                        }
-                      }
-                    },
-                    {
-                      "kind": "GridLayoutItem",
-                      "spec": {
-                        "x": 0,
-                        "y": 20,
-                        "width": 12,
-                        "height": 8,
-                        "element": {
-                          "kind": "ElementReference",
-                          "name": "panel-9"
-                        }
-                      }
-                    }
-                  ]
-                }
-              }
-            }
-          },
           {
             "kind": "TabsLayoutTab",
             "spec": {
@@ -3029,6 +3743,162 @@
                           "name": "panel-19"
                         }
                       }
+                    },
+                    {
+                      "kind": "GridLayoutItem",
+                      "spec": {
+                        "x": 0,
+                        "y": 28,
+                        "width": 12,
+                        "height": 8,
+                        "element": {
+                          "kind": "ElementReference",
+                          "name": "panel-31"
+                        }
+                      }
+                    },
+                    {
+                      "kind": "GridLayoutItem",
+                      "spec": {
+                        "x": 12,
+                        "y": 28,
+                        "width": 12,
+                        "height": 8,
+                        "element": {
+                          "kind": "ElementReference",
+                          "name": "panel-32"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          {
+            "kind": "TabsLayoutTab",
+            "spec": {
+              "title": "Overview",
+              "layout": {
+                "kind": "GridLayout",
+                "spec": {
+                  "items": [
+                    {
+                      "kind": "GridLayoutItem",
+                      "spec": {
+                        "x": 0,
+                        "y": 0,
+                        "width": 6,
+                        "height": 4,
+                        "element": {
+                          "kind": "ElementReference",
+                          "name": "panel-1"
+                        }
+                      }
+                    },
+                    {
+                      "kind": "GridLayoutItem",
+                      "spec": {
+                        "x": 6,
+                        "y": 0,
+                        "width": 6,
+                        "height": 4,
+                        "element": {
+                          "kind": "ElementReference",
+                          "name": "panel-2"
+                        }
+                      }
+                    },
+                    {
+                      "kind": "GridLayoutItem",
+                      "spec": {
+                        "x": 12,
+                        "y": 0,
+                        "width": 6,
+                        "height": 4,
+                        "element": {
+                          "kind": "ElementReference",
+                          "name": "panel-3"
+                        }
+                      }
+                    },
+                    {
+                      "kind": "GridLayoutItem",
+                      "spec": {
+                        "x": 18,
+                        "y": 0,
+                        "width": 6,
+                        "height": 4,
+                        "element": {
+                          "kind": "ElementReference",
+                          "name": "panel-4"
+                        }
+                      }
+                    },
+                    {
+                      "kind": "GridLayoutItem",
+                      "spec": {
+                        "x": 0,
+                        "y": 4,
+                        "width": 12,
+                        "height": 8,
+                        "element": {
+                          "kind": "ElementReference",
+                          "name": "panel-5"
+                        }
+                      }
+                    },
+                    {
+                      "kind": "GridLayoutItem",
+                      "spec": {
+                        "x": 12,
+                        "y": 4,
+                        "width": 12,
+                        "height": 8,
+                        "element": {
+                          "kind": "ElementReference",
+                          "name": "panel-6"
+                        }
+                      }
+                    },
+                    {
+                      "kind": "GridLayoutItem",
+                      "spec": {
+                        "x": 0,
+                        "y": 12,
+                        "width": 12,
+                        "height": 8,
+                        "element": {
+                          "kind": "ElementReference",
+                          "name": "panel-7"
+                        }
+                      }
+                    },
+                    {
+                      "kind": "GridLayoutItem",
+                      "spec": {
+                        "x": 12,
+                        "y": 12,
+                        "width": 12,
+                        "height": 8,
+                        "element": {
+                          "kind": "ElementReference",
+                          "name": "panel-9"
+                        }
+                      }
+                    },
+                    {
+                      "kind": "GridLayoutItem",
+                      "spec": {
+                        "x": 0,
+                        "y": 20,
+                        "width": 12,
+                        "height": 8,
+                        "element": {
+                          "kind": "ElementReference",
+                          "name": "panel-10"
+                        }
+                      }
                     }
                   ]
                 }
@@ -3125,6 +3995,84 @@
                 }
               }
             }
+          },
+          {
+            "kind": "TabsLayoutTab",
+            "spec": {
+              "title": "Sensor quality",
+              "layout": {
+                "kind": "GridLayout",
+                "spec": {
+                  "items": [
+                    {
+                      "kind": "GridLayoutItem",
+                      "spec": {
+                        "x": 0,
+                        "y": 0,
+                        "width": 12,
+                        "height": 8,
+                        "element": {
+                          "kind": "ElementReference",
+                          "name": "panel-26"
+                        }
+                      }
+                    },
+                    {
+                      "kind": "GridLayoutItem",
+                      "spec": {
+                        "x": 12,
+                        "y": 0,
+                        "width": 12,
+                        "height": 8,
+                        "element": {
+                          "kind": "ElementReference",
+                          "name": "panel-27"
+                        }
+                      }
+                    },
+                    {
+                      "kind": "GridLayoutItem",
+                      "spec": {
+                        "x": 0,
+                        "y": 8,
+                        "width": 12,
+                        "height": 8,
+                        "element": {
+                          "kind": "ElementReference",
+                          "name": "panel-28"
+                        }
+                      }
+                    },
+                    {
+                      "kind": "GridLayoutItem",
+                      "spec": {
+                        "x": 12,
+                        "y": 8,
+                        "width": 12,
+                        "height": 8,
+                        "element": {
+                          "kind": "ElementReference",
+                          "name": "panel-29"
+                        }
+                      }
+                    },
+                    {
+                      "kind": "GridLayoutItem",
+                      "spec": {
+                        "x": 0,
+                        "y": 16,
+                        "width": 24,
+                        "height": 8,
+                        "element": {
+                          "kind": "ElementReference",
+                          "name": "panel-30"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
           }
         ]
       }
@@ -3133,17 +4081,19 @@
     "liveNow": false,
     "preload": false,
     "tags": [
+      "aggregated",
+      "avg-60s",
       "esp32",
-      "prometheus",
       "iot",
-      "weather",
-      "multi-device"
+      "multi-device",
+      "prometheus",
+      "weather"
     ],
     "timeSettings": {
       "timezone": "browser",
       "from": "now-24h",
       "to": "now",
-      "autoRefresh": "30s",
+      "autoRefresh": "1m",
       "autoRefreshIntervals": [
         "5s",
         "10s",
@@ -3159,7 +4109,7 @@
       "hideTimepicker": false,
       "fiscalYearStartMonth": 0
     },
-    "title": "ESP32 Weather - Multi Device",
+    "title": "ESP32 Weather - Multi Device Aggregated",
     "variables": [
       {
         "kind": "QueryVariable",
