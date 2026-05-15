@@ -7,7 +7,6 @@ PROM_IMAGE := prom/prometheus
 
 ENV_FILE := .env
 SECRETS_DIR := secrets
-PVE_SECRET_FILE := $(SECRETS_DIR)/pve_token_value
 
 TEMPLATES_DIR := templates
 GENERATED_DIR := generated
@@ -69,7 +68,6 @@ init:
 .PHONY: ensure-local-config
 ensure-local-config:
 	@test -f "$(ENV_FILE)" || { echo "Missing $(ENV_FILE). Run: make init"; exit 1; }
-	@test -f "$(PVE_SECRET_FILE)" || { echo "Missing $(PVE_SECRET_FILE). Run: make init"; exit 1; }
 
 .PHONY: render
 render: ensure-local-config

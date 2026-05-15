@@ -11,3 +11,4 @@
     env: ${ENV_NAME}
     device: ${ESP32_BALCONY_DEVICE}
     room: ${ESP32_BALCONY_ROOM}
+    
