@@ -1,0 +1,100 @@
+groups:
+  - name: weather_derived
+    interval: 60s
+    rules:
+
+      # Temperature without field/unit labels
+      - record: weather:temperature:celsius
+        expr: |
+           max without (field, unit, sensor) (
+             esp32_sensor_mean_60s{
+               job="weather_station",
+               sensor="bme280",
+               field="temperature"
+             }
+           )
+
+      # Relative humidity without field/unit labels
+      - record: weather:relative_humidity:percent
+        expr: |
+          max without (field, unit, sensor) (
+            esp32_sensor_mean_60s{
+              job="weather_station",
+              sensor="bme280",
+              field="humidity"
+            }
+          )
+
+      # Pressure without field/unit labels
+      - record: weather:pressure:hPa
+        expr: |
+          max without (field, unit, sensor) (
+            esp32_sensor_mean_60s{
+              job="weather_station",
+              sensor="bme280",
+              field="pressure"
+            }
+          )
+      # Illuminance, lux
+      - record: weather:illuminance:lux
+        expr: |
+          max without (field, unit, sensor) (
+            esp32_sensor_mean_60s{
+              job="weather_station",
+              sensor="bh1750",
+              field="illuminance"
+            }
+          )
+      # Saturation vapor pressure, hPa
+      - record: weather:sat_vapor_pressure:hPa
+        expr: |
+          6.1078 * exp(
+            17.27 * weather:temperature:celsius
+            / (weather:temperature:celsius + 237.3)
+          )
+
+      # Actual vapor pressure, hPa
+      - record: weather:vapor_pressure:hPa
+        expr: |
+          weather:sat_vapor_pressure:hPa
+          * weather:relative_humidity:percent
+          / 100
+
+      # Absolute humidity, g/m³
+      - record: weather:absolute_humidity:g_m3
+        expr: |
+          216.7 * weather:vapor_pressure:hPa
+          / (weather:temperature:celsius + 273.15)
+
+      # Dew point, °C
+      - record: weather:dew_point:celsius
+        expr: |
+          237.3 * (
+            ln(clamp_min(weather:relative_humidity:percent, 1) / 100)
+            + 17.27 * weather:temperature:celsius
+            / (weather:temperature:celsius + 237.3)
+          ) / (
+            17.27
+            - ln(clamp_min(weather:relative_humidity:percent, 1) / 100)
+            - 17.27 * weather:temperature:celsius
+            / (weather:temperature:celsius + 237.3)
+          )
+
+      # Dew point spread / condensation margin, °C
+      - record: weather:dew_point_spread:celsius
+        expr: |
+          weather:temperature:celsius
+          - weather:dew_point:celsius
+
+      # Humidity ratio, kg water / kg dry air
+      - record: weather:humidity_ratio:kg_kg
+        expr: |
+          0.62198 * weather:vapor_pressure:hPa
+          / (weather:pressure:hPa - weather:vapor_pressure:hPa)
+
+      # Enthalpy of moist air, kJ/kg dry air
+      - record: weather:enthalpy:kj_kg
+        expr: |
+          1.006 * weather:temperature:celsius
+          + weather:humidity_ratio:kg_kg
+          * (2501 + 1.86 * weather:temperature:celsius)
