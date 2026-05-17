@@ -1,0 +1,4092 @@
+{
+  "apiVersion": "dashboard.grafana.app/v2",
+  "kind": "Dashboard",
+  "metadata": {
+    "name": "weather-observatory-revised",
+    "namespace": "default",
+    "uid": "b8189856-7fbb-49d0-9c30-e91f29d01e8a",
+    "resourceVersion": "1779053901384982",
+    "generation": 10,
+    "creationTimestamp": "2026-05-16T18:22:33Z",
+    "labels": {
+      "grafana.app/deprecatedInternalID": "2074115312283648"
+    },
+    "annotations": {
+      "grafana.app/createdBy": "user:cflqdlwxkaubkb",
+      "grafana.app/folder": "fflqdmbj7xlvkf",
+      "grafana.app/saved-from-ui": "Grafana v13.0.1 (a100054f)",
+      "grafana.app/updatedBy": "user:cflqdlwxkaubkb",
+      "grafana.app/updatedTimestamp": "2026-05-17T21:38:21Z",
+      "grafana.app/folderTitle": "Weather Station",
+      "grafana.app/folderUrl": "/dashboards/f/fflqdmbj7xlvkf/weather-station"
+    }
+  },
+  "spec": {
+    "annotations": [
+      {
+        "kind": "AnnotationQuery",
+        "spec": {
+          "query": {
+            "kind": "DataQuery",
+            "group": "grafana",
+            "version": "v0",
+            "spec": {
+              "limit": 100,
+              "matchAny": false,
+              "tags": [],
+              "type": "dashboard"
+            }
+          },
+          "enable": true,
+          "hide": true,
+          "iconColor": "rgba(0, 211, 255, 1)",
+          "name": "Annotations & Alerts",
+          "builtIn": true
+        }
+      }
+    ],
+    "cursorSync": "Off",
+    "editable": true,
+    "elements": {
+      "panel-44": {
+        "kind": "Panel",
+        "spec": {
+          "id": 44,
+          "title": "Daily climate profile, 3 axes",
+          "description": "",
+          "links": [],
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "prometheus",
+                      "version": "v0",
+                      "datasource": {
+                        "name": "prometheus"
+                      },
+                      "spec": {
+                        "editorMode": "code",
+                        "exemplar": false,
+                        "expr": "label_replace(\n  label_replace(\n  min_over_time(\n    weather:temperature:celsius{job=~\"$job\",  placement=\"outdoor\", reference=\"true\"}[$__range]\n  ),\n  \"stat\", \"day_min\", \"job\", \".*\"\n),\n  \"field\", \"temperature\", \"job\", \".*\"\n)\nor\nlabel_replace(\n  label_replace(\n  min_over_time(\n    weather:relative_humidity:percent{job=~\"$job\", placement=\"outdoor\", reference=\"true\"}[$__range]\n  ),\n  \"stat\", \"day_min\", \"job\", \".*\"\n),\n  \"field\", \"humidity\", \"job\", \".*\"\n)\nor\nlabel_replace(\n  label_replace(\n  min_over_time(\n    weather:pressure:hPa{job=~\"$job\", placement=\"outdoor\", reference=\"true\"}[$__range]\n  ),\n  \"stat\", \"day_min\", \"job\", \".*\"\n),\n  \"field\", \"pressure\", \"job\", \".*\"\n)\nor\nlabel_replace(\n  label_replace(\n  avg_over_time(\n    weather:temperature:celsius{job=~\"$job\", placement=\"outdoor\", reference=\"true\"}[$__range]\n  ),\n  \"stat\", \"day_mean\", \"job\", \".*\"\n),\n  \"field\", \"temperature\", \"job\", \".*\"\n)\nor\nlabel_replace(\n  label_replace(\n  avg_over_time(\n    weather:relative_humidity:percent{job=~\"$job\", placement=\"outdoor\", reference=\"true\"}[$__range]\n  ),\n  \"stat\", \"day_mean\", \"job\", \".*\"\n),\n  \"field\", \"humidity\", \"job\", \".*\"\n)\nor\nlabel_replace(\n  label_replace(\n  avg_over_time(\n    weather:pressure:hPa{job=~\"$job\",  placement=\"outdoor\", reference=\"true\"}[$__range]\n  ),\n  \"stat\", \"day_mean\", \"job\", \".*\"\n),\n  \"field\", \"pressure\", \"job\", \".*\"\n)\nor\nlabel_replace(\n  label_replace(\n  max_over_time(\n    weather:temperature:celsius{job=~\"$job\",  placement=\"outdoor\", reference=\"true\"}[$__range]\n  ),\n  \"stat\", \"day_max\", \"job\", \".*\"\n),\n  \"field\", \"temperature\", \"job\", \".*\"\n)\nor\nlabel_replace(\n  label_replace(\n  max_over_time(\n    weather:relative_humidity:percent{job=~\"$job\", placement=\"outdoor\", reference=\"true\"}[$__range]\n  ),\n  \"stat\", \"day_max\", \"job\", \".*\"\n),\n  \"field\", \"humidity\", \"job\", \".*\"\n)\nor\nlabel_replace(\n  label_replace(\n  max_over_time(\n    weather:pressure:hPa{job=~\"$job\", placement=\"outdoor\", reference=\"true\"}[$__range]\n  ),\n  \"stat\", \"day_max\", \"job\", \".*\"\n),\n  \"field\", \"pressure\", \"job\", \".*\"\n)",
+                        "instant": true,
+                        "legendFormat": "{{stat}} {{field}}",
+                        "range": false
+                      }
+                    },
+                    "refId": "A",
+                    "hidden": false
+                  }
+                }
+              ],
+              "transformations": [],
+              "queryOptions": {
+                "timeFrom": "now/d",
+                "timeShift": "0h"
+              }
+            }
+          },
+          "vizConfig": {
+            "kind": "VizConfig",
+            "group": "volkovlabs-echarts-panel",
+            "version": "7.2.4",
+            "spec": {
+              "options": {
+                "baidu": {
+                  "callback": "bmapReady",
+                  "key": ""
+                },
+                "editor": {
+                  "format": "auto"
+                },
+                "editorMode": "visual",
+                "gaode": {
+                  "key": "",
+                  "plugin": "AMap.Scale,AMap.ToolBar"
+                },
+                "getOption": "const series = context.panel.data.series.map((s) => {\n  const sData = s.fields.find((f) => f.type === 'number').values.buffer || s.fields.find((f) => f.type === 'number').values;\n  const sTime = s.fields.find((f) => f.type === 'time').values.buffer || s.fields.find((f) => f.type === 'time').values;\n  \n  return {\n    name: s.refId,\n    type: 'line',\n    showSymbol: false,\n    areaStyle: {\n      opacity: 0.1,\n    },\n    lineStyle: {\n      width: 1,\n    },\n    data: sData.map((d, i) => [sTime[i], d.toFixed(2)]),\n  };\n});\n\n/**\n * Enable Data Zoom by default\n */\nsetTimeout(() => context.panel.chart.dispatchAction({\n  type: 'takeGlobalCursor',\n  key: 'dataZoomSelect',\n  dataZoomSelectActive: true,\n}), 500);\n\n/**\n * Update Time Range on Zoom\n */\ncontext.panel.chart.on('datazoom', function (params) {\n  const startValue = params.batch[0]?.startValue;\n  const endValue = params.batch[0]?.endValue;\n  locationService.partial({ from: startValue, to: endValue });\n});\n\nreturn {\n  backgroundColor: 'transparent',\n  tooltip: {\n    trigger: 'axis',\n  },\n  legend: {\n    left: '0',\n    bottom: '0',\n    data: context.panel.data.series.map((s) => s.refId),\n    textStyle: {\n      color: 'rgba(128, 128, 128, .9)',\n    },\n  },\n  toolbox: {\n    feature: {\n      dataZoom: {\n        yAxisIndex: 'none',\n        icon: {\n          zoom: 'path://',\n          back: 'path://',\n        },\n      },\n      saveAsImage: {},\n    }\n  },\n  xAxis: {\n    type: 'time',\n  },\n  yAxis: {\n    type: 'value',\n    min: 'dataMin',\n  },\n  grid: {\n    left: '2%',\n    right: '2%',\n    top: '2%',\n    bottom: 24,\n    containLabel: true,\n  },\n  series,\n};",
+                "google": {
+                  "callback": "gmapReady",
+                  "key": ""
+                },
+                "map": "none",
+                "renderer": "canvas",
+                "themeEditor": {
+                  "config": "{}",
+                  "name": "default"
+                },
+                "visualEditor": {
+                  "code": "const axisOrder = [\"temperature\", \"humidity\", \"pressure\"];\n\nconst ranges = {\n  temperature: { label: \"Temperature °C\", min: -20, max: 35, unit: \"°C\" },\n  humidity: { label: \"Humidity %\", min: 0, max: 100, unit: \"%\" },\n  pressure: { label: \"Pressure hPa\", min: 980, max: 1040, unit: \"hPa\" },\n};\n\nconst groupedRaw = {};\n\nfor (const s of context.panel.data.series) {\n  const valueField = s.fields.find((f) => f.type === \"number\");\n  if (!valueField) continue;\n\n  const labels = valueField.labels || {};\n  const stat = labels.stat;\n  const field = labels.field;\n\n  if (!stat || !field) continue;\n  if (!axisOrder.includes(field)) continue;\n\n  if (!groupedRaw[stat]) {\n    groupedRaw[stat] = {};\n  }\n\n  const values = valueField.values;\n  const idx = (values.length ?? 0) - 1;\n  const value = values.get ? values.get(idx) : values[idx];\n\n  if (value == null || Number.isNaN(Number(value))) continue;\n\n  groupedRaw[stat][field] = Number(value);\n}\n\nfunction normalize(field, value) {\n  const cfg = ranges[field];\n  if (!cfg) return 0;\n\n  const span = cfg.max - cfg.min;\n  if (span <= 0) return 0;\n\n  const pct = ((value - cfg.min) / span) * 100;\n  return Math.max(0, Math.min(100, pct));\n}\n\nconst seriesOrder = [\n  { key: \"day_min\", name: \"Day Min\", symbol: \"rect\" },\n  { key: \"day_mean\", name: \"Day Mean\", symbol: \"circle\" },\n  { key: \"day_max\", name: \"Day Max\", symbol: \"triangle\" },\n];\n\nreturn {\n  backgroundColor: \"transparent\",\n  tooltip: {\n    trigger: \"item\",\n    formatter: function (params) {\n      const raw = params.data.raw || {};\n      return [\n        `<b>${params.name}</b>`,\n        `Temperature: ${raw.temperature?.toFixed(2) ?? \"-\"} °C`,\n        `Humidity: ${raw.humidity?.toFixed(2) ?? \"-\"} %`,\n        `Pressure: ${raw.pressure?.toFixed(2) ?? \"-\"} hPa`,\n      ].join(\"<br/>\");\n    },\n  },\n  legend: {\n    bottom: 10,\n  },\n  radar: {\n    radius: \"90%\",\n    splitNumber: 5,\n    indicator: axisOrder.map((field) => ({\n      name: ranges[field].label,\n      min: 0,\n      max: 100,\n    })),\n  },\n  series: [\n    {\n      type: \"radar\",\n      data: seriesOrder\n        .filter(({ key }) => groupedRaw[key])\n        .map(({ key, name, symbol }) => {\n          const raw = groupedRaw[key];\n          return {\n            name,\n            symbol,\n            symbolSize: 8,\n            raw,\n            value: axisOrder.map((field) => normalize(field, raw[field] ?? NaN)),\n            lineStyle: { width: 2 },\n            areaStyle: { opacity: 0 },\n          };\n        }),\n    },\n  ],\n};",
+                  "dataset": [],
+                  "series": []
+                }
+              },
+              "fieldConfig": {
+                "defaults": {},
+                "overrides": []
+              }
+            }
+          }
+        }
+      },
+      "panel-55": {
+        "kind": "Panel",
+        "spec": {
+          "id": 55,
+          "title": "Daily climate profile, 4 axes",
+          "description": "",
+          "links": [],
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "prometheus",
+                      "version": "v0",
+                      "datasource": {
+                        "name": "prometheus"
+                      },
+                      "spec": {
+                        "editorMode": "code",
+                        "exemplar": false,
+                        "expr": "label_replace(\n  label_replace(\n  min_over_time(\n    weather:temperature:celsius{job=~\"$job\", placement=\"outdoor\" , reference=\"true\"}[$__range]\n  ),\n  \"stat\", \"day_min\", \"job\", \".*\"\n),\n  \"field\", \"temperature\", \"job\", \".*\"\n)\nor\nlabel_replace(\n  label_replace(\n  min_over_time(\n    weather:relative_humidity:percent{job=~\"$job\", placement=\"outdoor\", reference=\"true\"}[$__range]\n  ),\n  \"stat\", \"day_min\", \"job\", \".*\"\n),\n  \"field\", \"humidity\", \"job\", \".*\"\n)\nor\nlabel_replace(\n  label_replace(\n  min_over_time(\n    weather:pressure:hPa{job=~\"$job\", placement=\"outdoor\", reference=\"true\"}[$__range]\n  ),\n  \"stat\", \"day_min\", \"job\", \".*\"\n),\n  \"field\", \"pressure\", \"job\", \".*\"\n)\nor\nlabel_replace(\n  label_replace(\n  min_over_time(\n    weather:illuminance:lux{job=~\"$job\", placement=\"outdoor\", reference=\"true\"}[$__range]\n  ),\n  \"stat\", \"day_min\", \"job\", \".*\"\n),\n  \"field\", \"illuminance\", \"job\", \".*\"\n)\nor\nlabel_replace(\n  label_replace(\n  avg_over_time(\n    weather:temperature:celsius{job=~\"$job\", placement=\"outdoor\", reference=\"true\"}[$__range]\n  ),\n  \"stat\", \"day_mean\", \"job\", \".*\"\n),\n  \"field\", \"temperature\", \"job\", \".*\"\n)\nor\nlabel_replace(\n  label_replace(\n  avg_over_time(\n    weather:relative_humidity:percent{job=~\"$job\", placement=\"outdoor\", reference=\"true\"}[$__range]\n  ),\n  \"stat\", \"day_mean\", \"job\", \".*\"\n),\n  \"field\", \"humidity\", \"job\", \".*\"\n)\nor\nlabel_replace(\n  label_replace(\n  avg_over_time(\n    weather:pressure:hPa{job=~\"$job\", placement=\"outdoor\", reference=\"true\"}[$__range]\n  ),\n  \"stat\", \"day_mean\", \"job\", \".*\"\n),\n  \"field\", \"pressure\", \"job\", \".*\"\n)\nor\nlabel_replace(\n  label_replace(\n  avg_over_time(\n    weather:illuminance:lux{job=~\"$job\", placement=\"outdoor\", reference=\"true\"}[$__range]\n  ),\n  \"stat\", \"day_mean\", \"job\", \".*\"\n),\n  \"field\", \"illuminance\", \"job\", \".*\"\n)\nor\nlabel_replace(\n  label_replace(\n  quantile_over_time(\n    0.5,\n    weather:temperature:celsius{job=~\"$job\", placement=\"outdoor\", reference=\"true\"}[$__range]\n  ),\n  \"stat\", \"day_median\", \"job\", \".*\"\n),\n  \"field\", \"temperature\", \"job\", \".*\"\n)\nor\nlabel_replace(\n  label_replace(\n  quantile_over_time(\n    0.5,\n    weather:relative_humidity:percent{job=~\"$job\", placement=\"outdoor\", reference=\"true\"}[$__range]\n  ),\n  \"stat\", \"day_median\", \"job\", \".*\"\n),\n  \"field\", \"humidity\", \"job\", \".*\"\n)\nor\nlabel_replace(\n  label_replace(\n  quantile_over_time(\n    0.5,\n    weather:pressure:hPa{job=~\"$job\", placement=\"outdoor\", reference=\"true\"}[$__range]\n  ),\n  \"stat\", \"day_median\", \"job\", \".*\"\n),\n  \"field\", \"pressure\", \"job\", \".*\"\n)\nor\nlabel_replace(\n  label_replace(\n  quantile_over_time(\n    0.5,\n    weather:illuminance:lux{job=~\"$job\", placement=\"outdoor\", reference=\"true\"}[$__range]\n  ),\n  \"stat\", \"day_median\", \"job\", \".*\"\n),\n  \"field\", \"illuminance\", \"job\", \".*\"\n)\nor\nlabel_replace(\n  label_replace(\n  max_over_time(\n    weather:temperature:celsius{job=~\"$job\", placement=\"outdoor\", reference=\"true\"}[$__range]\n  ),\n  \"stat\", \"day_max\", \"job\", \".*\"\n),\n  \"field\", \"temperature\", \"job\", \".*\"\n)\nor\nlabel_replace(\n  label_replace(\n  max_over_time(\n    weather:relative_humidity:percent{job=~\"$job\", placement=\"outdoor\", reference=\"true\"}[$__range]\n  ),\n  \"stat\", \"day_max\", \"job\", \".*\"\n),\n  \"field\", \"humidity\", \"job\", \".*\"\n)\nor\nlabel_replace(\n  label_replace(\n  max_over_time(\n    weather:pressure:hPa{job=~\"$job\", placement=\"outdoor\", reference=\"true\"}[$__range]\n  ),\n  \"stat\", \"day_max\", \"job\", \".*\"\n),\n  \"field\", \"pressure\", \"job\", \".*\"\n)\nor\nlabel_replace(\n  label_replace(\n  max_over_time(\n    weather:illuminance:lux{job=~\"$job\", placement=\"outdoor\", reference=\"true\"}[$__range]\n  ),\n  \"stat\", \"day_max\", \"job\", \".*\"\n),\n  \"field\", \"illuminance\", \"job\", \".*\"\n)",
+                        "instant": true,
+                        "legendFormat": "{{stat}} {{field}}",
+                        "range": false
+                      }
+                    },
+                    "refId": "A",
+                    "hidden": false
+                  }
+                }
+              ],
+              "transformations": [],
+              "queryOptions": {
+                "timeFrom": "now/d",
+                "timeShift": "0h"
+              }
+            }
+          },
+          "vizConfig": {
+            "kind": "VizConfig",
+            "group": "volkovlabs-echarts-panel",
+            "version": "7.2.4",
+            "spec": {
+              "options": {
+                "baidu": {
+                  "callback": "bmapReady",
+                  "key": ""
+                },
+                "editor": {
+                  "format": "auto"
+                },
+                "editorMode": "visual",
+                "gaode": {
+                  "key": "",
+                  "plugin": "AMap.Scale,AMap.ToolBar"
+                },
+                "getOption": "const series = context.panel.data.series.map((s) => {\n  const sData = s.fields.find((f) => f.type === 'number').values.buffer || s.fields.find((f) => f.type === 'number').values;\n  const sTime = s.fields.find((f) => f.type === 'time').values.buffer || s.fields.find((f) => f.type === 'time').values;\n  \n  return {\n    name: s.refId,\n    type: 'line',\n    showSymbol: false,\n    areaStyle: {\n      opacity: 0.1,\n    },\n    lineStyle: {\n      width: 1,\n    },\n    data: sData.map((d, i) => [sTime[i], d.toFixed(2)]),\n  };\n});\n\n/**\n * Enable Data Zoom by default\n */\nsetTimeout(() => context.panel.chart.dispatchAction({\n  type: 'takeGlobalCursor',\n  key: 'dataZoomSelect',\n  dataZoomSelectActive: true,\n}), 500);\n\n/**\n * Update Time Range on Zoom\n */\ncontext.panel.chart.on('datazoom', function (params) {\n  const startValue = params.batch[0]?.startValue;\n  const endValue = params.batch[0]?.endValue;\n  locationService.partial({ from: startValue, to: endValue });\n});\n\nreturn {\n  backgroundColor: 'transparent',\n  tooltip: {\n    trigger: 'axis',\n  },\n  legend: {\n    left: '0',\n    bottom: '0',\n    data: context.panel.data.series.map((s) => s.refId),\n    textStyle: {\n      color: 'rgba(128, 128, 128, .9)',\n    },\n  },\n  toolbox: {\n    feature: {\n      dataZoom: {\n        yAxisIndex: 'none',\n        icon: {\n          zoom: 'path://',\n          back: 'path://',\n        },\n      },\n      saveAsImage: {},\n    }\n  },\n  xAxis: {\n    type: 'time',\n  },\n  yAxis: {\n    type: 'value',\n    min: 'dataMin',\n  },\n  grid: {\n    left: '2%',\n    right: '2%',\n    top: '2%',\n    bottom: 24,\n    containLabel: true,\n  },\n  series,\n};",
+                "google": {
+                  "callback": "gmapReady",
+                  "key": ""
+                },
+                "map": "none",
+                "renderer": "canvas",
+                "themeEditor": {
+                  "config": "{}",
+                  "name": "default"
+                },
+                "visualEditor": {
+                  "code": "const axisOrder = [\"temperature\", \"humidity\", \"pressure\", \"illuminance\"];\n\nconst ranges = {\n  temperature: { label: \"Temperature °C\", min: -20, max: 35, unit: \"°C\" },\n  humidity: { label: \"Humidity %\", min: 0, max: 100, unit: \"%\" },\n  pressure: { label: \"Pressure hPa\", min: 980, max: 1040, unit: \"hPa\" },\n  illuminance: { label: \"Illuminance lx\", min: 0, max: 50000, unit: \"lx\" },\n};\n\nconst groupedRaw = {};\n\nfor (const s of context.panel.data.series) {\n  const valueField = s.fields.find((f) => f.type === \"number\");\n  if (!valueField) continue;\n\n  const labels = valueField.labels || {};\n  const stat = labels.stat;\n  const field = labels.field;\n\n  if (!stat || !field) continue;\n  if (!axisOrder.includes(field)) continue;\n\n  if (!groupedRaw[stat]) {\n    groupedRaw[stat] = {};\n  }\n\n  const values = valueField.values;\n  const idx = (values.length ?? 0) - 1;\n  const value = values.get ? values.get(idx) : values[idx];\n\n  if (value == null || Number.isNaN(Number(value))) continue;\n\n  groupedRaw[stat][field] = Number(value);\n}\n\nfunction normalize(field, value) {\n  const cfg = ranges[field];\n  if (!cfg || value == null || Number.isNaN(value)) return 0;\n\n  if (field === \"illuminance\") {\n    const maxLux = cfg.max;\n    const safeValue = Math.max(0, value);\n    const pct = (Math.log10(safeValue + 1) / Math.log10(maxLux + 1)) * 100;\n    return Math.max(0, Math.min(100, pct));\n  }\n\n  const span = cfg.max - cfg.min;\n  if (span <= 0) return 0;\n\n  const pct = ((value - cfg.min) / span) * 100;\n  return Math.max(0, Math.min(100, pct));\n}\n\nconst seriesOrder = [\n  { key: \"day_min\", name: \"Day Min\", symbol: \"rect\" },\n  { key: \"day_mean\", name: \"Day Mean\", symbol: \"circle\" },\n  { key: \"day_median\", name: \"Day Median\", symbol: \"diamond\" },\n  { key: \"day_max\", name: \"Day Max\", symbol: \"triangle\" },\n];\n\nreturn {\n  backgroundColor: \"transparent\",\n  tooltip: {\n    trigger: \"item\",\n    formatter: function (params) {\n      const raw = params.data.raw || {};\n      return [\n        `<b>${params.name}</b>`,\n        `Temperature: ${raw.temperature?.toFixed(2) ?? \"-\"} °C`,\n        `Humidity: ${raw.humidity?.toFixed(2) ?? \"-\"} %`,\n        `Pressure: ${raw.pressure?.toFixed(2) ?? \"-\"} hPa`,\n        `Illuminance: ${raw.illuminance?.toFixed(0) ?? \"-\"} lx`,\n      ].join(\"<br/>\");\n    },\n  },\n  legend: {\n    bottom: 10,\n  },\n  radar: {\n    radius: \"80%\",\n    splitNumber: 5,\n    indicator: axisOrder.map((field) => ({\n      name: ranges[field].label,\n      min: 0,\n      max: 100,\n    })),\n  },\n  series: [\n    {\n      type: \"radar\",\n      data: seriesOrder\n        .filter(({ key }) => groupedRaw[key])\n        .map(({ key, name, symbol }) => {\n          const raw = groupedRaw[key];\n          return {\n            name,\n            symbol,\n            symbolSize: 8,\n            raw,\n            value: axisOrder.map((field) => normalize(field, raw[field] ?? NaN)),\n            lineStyle: { width: key === \"day_mean\" ? 3 : 2 },\n            areaStyle: { opacity: 0 },\n          };\n        }),\n    },\n  ],\n};",
+                  "dataset": [],
+                  "series": []
+                }
+              },
+              "fieldConfig": {
+                "defaults": {},
+                "overrides": []
+              }
+            }
+          }
+        }
+      },
+      "panel-61": {
+        "kind": "Panel",
+        "spec": {
+          "id": 61,
+          "title": "Storm risk index",
+          "description": "",
+          "links": [],
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "prometheus",
+                      "version": "v0",
+                      "datasource": {
+                        "name": "prometheus"
+                      },
+                      "spec": {
+                        "editorMode": "code",
+                        "exemplar": false,
+                        "expr": "(\n  sum(\n    50 *\n    clamp_max(clamp_min(-delta(weather:pressure:hPa{job=~\"$job\",  placement=\"outdoor\", reference=\"true\"}[3h]), 0), 4) / 4\n  ) or vector(0)\n)\n+\n(\n  sum(\n    20 *\n    clamp_max(clamp_min(delta(weather:relative_humidity:percent{job=~\"$job\",  placement=\"outdoor\", reference=\"true\"}[3h]), 0), 20) / 20\n  ) or vector(0)\n)\n+\n(\n  sum(\n    20 *\n    clamp_max(clamp_min(-delta(weather:temperature:celsius{job=~\"$job\",  placement=\"outdoor\", reference=\"true\"}[3h]), 0), 5) / 5\n  ) or vector(0)\n)\n+\n(\n  sum(\n    10 *\n    clamp_max(stddev_over_time(weather:pressure:hPa{job=~\"$job\",  placement=\"outdoor\", reference=\"true\"}[30m]), 0.8) / 0.8\n  ) or vector(0)\n)",
+                        "instant": false,
+                        "legendFormat": "__auto",
+                        "range": true
+                      }
+                    },
+                    "refId": "A",
+                    "hidden": false
+                  }
+                }
+              ],
+              "transformations": [],
+              "queryOptions": {}
+            }
+          },
+          "vizConfig": {
+            "kind": "VizConfig",
+            "group": "gauge",
+            "version": "13.0.1",
+            "spec": {
+              "options": {
+                "barShape": "flat",
+                "barWidthFactor": 0.83,
+                "effects": {
+                  "barGlow": false,
+                  "centerGlow": true,
+                  "gradient": true
+                },
+                "endpointMarker": "point",
+                "minVizHeight": 75,
+                "minVizWidth": 87,
+                "orientation": "vertical",
+                "reduceOptions": {
+                  "calcs": [
+                    "lastNotNull"
+                  ],
+                  "fields": "",
+                  "values": false
+                },
+                "segmentCount": 100,
+                "segmentSpacing": 0.5,
+                "shape": "circle",
+                "showThresholdLabels": true,
+                "showThresholdMarkers": true,
+                "sizing": "manual",
+                "sparkline": true,
+                "textMode": "auto"
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "decimals": 1,
+                  "min": 0,
+                  "max": 100,
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "value": 0,
+                        "color": "green"
+                      },
+                      {
+                        "value": 20,
+                        "color": "super-light-yellow"
+                      },
+                      {
+                        "value": 40,
+                        "color": "#EAB839"
+                      },
+                      {
+                        "value": 60,
+                        "color": "yellow"
+                      },
+                      {
+                        "value": 80,
+                        "color": "red"
+                      }
+                    ]
+                  },
+                  "color": {
+                    "mode": "thresholds"
+                  }
+                },
+                "overrides": []
+              }
+            }
+          }
+        }
+      },
+      "panel-62": {
+        "kind": "Panel",
+        "spec": {
+          "id": 62,
+          "title": "Pressure variability contribution",
+          "description": "",
+          "links": [],
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "prometheus",
+                      "version": "v0",
+                      "datasource": {
+                        "name": "prometheus"
+                      },
+                      "spec": {
+                        "editorMode": "code",
+                        "exemplar": false,
+                        "expr": "10 *\nclamp_max(\n  stddev_over_time(weather:pressure:hPa{job=~\"$job\",  placement=\"outdoor\", reference=\"true\"}[30m]),\n  0.8\n) / 0.8",
+                        "instant": true,
+                        "legendFormat": "__auto",
+                        "range": false
+                      }
+                    },
+                    "refId": "A",
+                    "hidden": false
+                  }
+                }
+              ],
+              "transformations": [],
+              "queryOptions": {}
+            }
+          },
+          "vizConfig": {
+            "kind": "VizConfig",
+            "group": "bargauge",
+            "version": "13.0.1",
+            "spec": {
+              "options": {
+                "displayMode": "lcd",
+                "legend": {
+                  "calcs": [],
+                  "displayMode": "list",
+                  "placement": "bottom",
+                  "showLegend": false
+                },
+                "maxVizHeight": 300,
+                "minVizHeight": 16,
+                "minVizWidth": 8,
+                "namePlacement": "auto",
+                "orientation": "horizontal",
+                "reduceOptions": {
+                  "calcs": [
+                    "lastNotNull"
+                  ],
+                  "fields": "",
+                  "values": false
+                },
+                "showUnfilled": true,
+                "sizing": "auto",
+                "valueMode": "color"
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "decimals": 1,
+                  "min": 0,
+                  "max": 100,
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "value": 0,
+                        "color": "green"
+                      },
+                      {
+                        "value": 20,
+                        "color": "super-light-yellow"
+                      },
+                      {
+                        "value": 40,
+                        "color": "#EAB839"
+                      },
+                      {
+                        "value": 60,
+                        "color": "yellow"
+                      },
+                      {
+                        "value": 80,
+                        "color": "red"
+                      }
+                    ]
+                  },
+                  "color": {
+                    "mode": "thresholds"
+                  }
+                },
+                "overrides": []
+              }
+            }
+          }
+        }
+      },
+      "panel-63": {
+        "kind": "Panel",
+        "spec": {
+          "id": 63,
+          "title": "Temperature drop contribution",
+          "description": "",
+          "links": [],
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "prometheus",
+                      "version": "v0",
+                      "datasource": {
+                        "name": "prometheus"
+                      },
+                      "spec": {
+                        "editorMode": "code",
+                        "exemplar": false,
+                        "expr": "20 *\nclamp_max(\n  clamp_min(-delta(weather:temperature:celsius{job=~\"$job\", placement=\"outdoor\", reference=\"true\"}[3h]), 0),\n  5\n) / 5",
+                        "instant": true,
+                        "legendFormat": "__auto",
+                        "range": false
+                      }
+                    },
+                    "refId": "A",
+                    "hidden": false
+                  }
+                }
+              ],
+              "transformations": [],
+              "queryOptions": {}
+            }
+          },
+          "vizConfig": {
+            "kind": "VizConfig",
+            "group": "bargauge",
+            "version": "13.0.1",
+            "spec": {
+              "options": {
+                "displayMode": "lcd",
+                "legend": {
+                  "calcs": [],
+                  "displayMode": "list",
+                  "placement": "bottom",
+                  "showLegend": false
+                },
+                "maxVizHeight": 300,
+                "minVizHeight": 16,
+                "minVizWidth": 8,
+                "namePlacement": "auto",
+                "orientation": "horizontal",
+                "reduceOptions": {
+                  "calcs": [
+                    "lastNotNull"
+                  ],
+                  "fields": "",
+                  "values": false
+                },
+                "showUnfilled": true,
+                "sizing": "auto",
+                "valueMode": "color"
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "decimals": 1,
+                  "min": 0,
+                  "max": 100,
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "value": 0,
+                        "color": "green"
+                      },
+                      {
+                        "value": 20,
+                        "color": "super-light-yellow"
+                      },
+                      {
+                        "value": 40,
+                        "color": "#EAB839"
+                      },
+                      {
+                        "value": 60,
+                        "color": "yellow"
+                      },
+                      {
+                        "value": 80,
+                        "color": "red"
+                      }
+                    ]
+                  },
+                  "color": {
+                    "mode": "thresholds"
+                  }
+                },
+                "overrides": []
+              }
+            }
+          }
+        }
+      },
+      "panel-64": {
+        "kind": "Panel",
+        "spec": {
+          "id": 64,
+          "title": "Pressure fall contribution",
+          "description": "",
+          "links": [],
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "prometheus",
+                      "version": "v0",
+                      "datasource": {
+                        "name": "prometheus"
+                      },
+                      "spec": {
+                        "editorMode": "code",
+                        "exemplar": false,
+                        "expr": "50 *\nclamp_max(\n  clamp_min(-delta(weather:pressure:hPa{job=~\"$job\", placement=\"outdoor\", reference=\"true\"}[3h]), 0),\n  4\n) / 4",
+                        "instant": true,
+                        "legendFormat": "__auto",
+                        "range": false
+                      }
+                    },
+                    "refId": "A",
+                    "hidden": false
+                  }
+                }
+              ],
+              "transformations": [],
+              "queryOptions": {}
+            }
+          },
+          "vizConfig": {
+            "kind": "VizConfig",
+            "group": "bargauge",
+            "version": "13.0.1",
+            "spec": {
+              "options": {
+                "displayMode": "lcd",
+                "legend": {
+                  "calcs": [],
+                  "displayMode": "list",
+                  "placement": "bottom",
+                  "showLegend": false
+                },
+                "maxVizHeight": 300,
+                "minVizHeight": 16,
+                "minVizWidth": 8,
+                "namePlacement": "auto",
+                "orientation": "horizontal",
+                "reduceOptions": {
+                  "calcs": [
+                    "lastNotNull"
+                  ],
+                  "fields": "",
+                  "values": false
+                },
+                "showUnfilled": true,
+                "sizing": "auto",
+                "valueMode": "color"
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "decimals": 1,
+                  "min": 0,
+                  "max": 100,
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "value": 0,
+                        "color": "green"
+                      },
+                      {
+                        "value": 20,
+                        "color": "super-light-yellow"
+                      },
+                      {
+                        "value": 40,
+                        "color": "#EAB839"
+                      },
+                      {
+                        "value": 60,
+                        "color": "yellow"
+                      },
+                      {
+                        "value": 80,
+                        "color": "red"
+                      }
+                    ]
+                  },
+                  "color": {
+                    "mode": "thresholds"
+                  }
+                },
+                "overrides": []
+              }
+            }
+          }
+        }
+      },
+      "panel-65": {
+        "kind": "Panel",
+        "spec": {
+          "id": 65,
+          "title": "Humidity rise contribution",
+          "description": "",
+          "links": [],
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "prometheus",
+                      "version": "v0",
+                      "datasource": {
+                        "name": "prometheus"
+                      },
+                      "spec": {
+                        "editorMode": "code",
+                        "exemplar": false,
+                        "expr": "20 *\nclamp_max(\n  clamp_min(delta(weather:relative_humidity:percent{job=~\"$job\", placement=\"outdoor\", reference=\"true\"}[3h]), 0),\n  20\n) / 20",
+                        "instant": true,
+                        "legendFormat": "__auto",
+                        "range": false
+                      }
+                    },
+                    "refId": "A",
+                    "hidden": false
+                  }
+                }
+              ],
+              "transformations": [],
+              "queryOptions": {}
+            }
+          },
+          "vizConfig": {
+            "kind": "VizConfig",
+            "group": "bargauge",
+            "version": "13.0.1",
+            "spec": {
+              "options": {
+                "displayMode": "lcd",
+                "legend": {
+                  "calcs": [],
+                  "displayMode": "list",
+                  "placement": "bottom",
+                  "showLegend": false
+                },
+                "maxVizHeight": 300,
+                "minVizHeight": 16,
+                "minVizWidth": 8,
+                "namePlacement": "auto",
+                "orientation": "horizontal",
+                "reduceOptions": {
+                  "calcs": [
+                    "lastNotNull"
+                  ],
+                  "fields": "",
+                  "values": false
+                },
+                "showUnfilled": true,
+                "sizing": "auto",
+                "valueMode": "color"
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "decimals": 1,
+                  "min": 0,
+                  "max": 100,
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "value": 0,
+                        "color": "green"
+                      },
+                      {
+                        "value": 20,
+                        "color": "super-light-yellow"
+                      },
+                      {
+                        "value": 40,
+                        "color": "#EAB839"
+                      },
+                      {
+                        "value": 60,
+                        "color": "yellow"
+                      },
+                      {
+                        "value": 80,
+                        "color": "red"
+                      }
+                    ]
+                  },
+                  "color": {
+                    "mode": "thresholds"
+                  }
+                },
+                "overrides": []
+              }
+            }
+          }
+        }
+      },
+      "panel-66": {
+        "kind": "Panel",
+        "spec": {
+          "id": 66,
+          "title": "Temperature–dew point phase",
+          "description": "",
+          "links": [],
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "prometheus",
+                      "version": "v0",
+                      "datasource": {
+                        "name": "prometheus"
+                      },
+                      "spec": {
+                        "editorMode": "code",
+                        "exemplar": false,
+                        "expr": "label_replace(weather:temperature:celsius{job=~\"$job\", placement=\"outdoor\", reference=\"true\"}, \"field\", \"temperature\", \"__name__\", \".*\")",
+                        "instant": false,
+                        "legendFormat": "{{field}}",
+                        "range": true
+                      }
+                    },
+                    "refId": "A",
+                    "hidden": false
+                  }
+                },
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "prometheus",
+                      "version": "v0",
+                      "datasource": {
+                        "name": "prometheus"
+                      },
+                      "spec": {
+                        "editorMode": "code",
+                        "expr": "label_replace(weather:dew_point:celsius{job=~\"$job\", placement=\"outdoor\", reference=\"true\"}, \"field\", \"dew_point\", \"__name__\", \".*\")",
+                        "instant": false,
+                        "legendFormat": "{{field}}",
+                        "range": true
+                      }
+                    },
+                    "refId": "B",
+                    "hidden": false
+                  }
+                },
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "prometheus",
+                      "version": "v0",
+                      "datasource": {
+                        "name": "prometheus"
+                      },
+                      "spec": {
+                        "editorMode": "code",
+                        "expr": "hour(timestamp(weather:temperature:celsius{job=~\"$job\", placement=\"outdoor\", reference=\"true\"}) + 2 * 3600)",
+                        "instant": false,
+                        "legendFormat": "time_of_day",
+                        "range": true
+                      }
+                    },
+                    "refId": "C",
+                    "hidden": false
+                  }
+                }
+              ],
+              "transformations": [
+                {
+                  "kind": "Transformation",
+                  "group": "prepareTimeSeries",
+                  "spec": {
+                    "options": {
+                      "format": "wide"
+                    }
+                  }
+                }
+              ],
+              "queryOptions": {}
+            }
+          },
+          "vizConfig": {
+            "kind": "VizConfig",
+            "group": "xychart",
+            "version": "13.0.1",
+            "spec": {
+              "options": {
+                "legend": {
+                  "calcs": [],
+                  "displayMode": "list",
+                  "placement": "bottom",
+                  "showLegend": false
+                },
+                "mapping": "manual",
+                "series": [
+                  {
+                    "color": {
+                      "matcher": {
+                        "id": "byName",
+                        "options": "time_of_day"
+                      }
+                    },
+                    "frame": {
+                      "matcher": {
+                        "id": "byIndex",
+                        "options": 0
+                      }
+                    },
+                    "x": {
+                      "matcher": {
+                        "id": "byName",
+                        "options": "temperature"
+                      }
+                    },
+                    "y": {
+                      "matcher": {
+                        "id": "byName",
+                        "options": "dew_point"
+                      }
+                    }
+                  }
+                ],
+                "tooltip": {
+                  "hideZeros": false,
+                  "mode": "single",
+                  "sort": "none"
+                }
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "value": 0,
+                        "color": "purple"
+                      },
+                      {
+                        "value": 6,
+                        "color": "blue"
+                      },
+                      {
+                        "value": 12,
+                        "color": "green"
+                      },
+                      {
+                        "value": 18,
+                        "color": "yellow"
+                      },
+                      {
+                        "value": 23,
+                        "color": "orange"
+                      }
+                    ]
+                  },
+                  "color": {
+                    "mode": "continuous-BlYlRd",
+                    "seriesBy": "last"
+                  },
+                  "custom": {
+                    "axisBorderShow": false,
+                    "axisCenteredZero": false,
+                    "axisColorMode": "text",
+                    "axisLabel": "",
+                    "axisPlacement": "auto",
+                    "fillOpacity": 63,
+                    "hideFrom": {
+                      "legend": false,
+                      "tooltip": false,
+                      "viz": false
+                    },
+                    "lineStyle": {
+                      "fill": "solid"
+                    },
+                    "pointShape": "circle",
+                    "pointSize": {
+                      "fixed": 3
+                    },
+                    "pointStrokeWidth": 0,
+                    "scaleDistribution": {
+                      "type": "linear"
+                    },
+                    "show": "points"
+                  },
+                  "fieldMinMax": false
+                },
+                "overrides": [
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "scope": "series",
+                      "options": "time"
+                    },
+                    "properties": [
+                      {
+                        "id": "min",
+                        "value": 0
+                      },
+                      {
+                        "id": "max",
+                        "value": 23
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          }
+        }
+      },
+      "panel-69": {
+        "kind": "Panel",
+        "spec": {
+          "id": 69,
+          "title": "Temperature–humidity phase by light",
+          "description": "",
+          "links": [],
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "prometheus",
+                      "version": "v0",
+                      "datasource": {
+                        "name": "prometheus"
+                      },
+                      "spec": {
+                        "editorMode": "code",
+                        "exemplar": false,
+                        "expr": "label_replace(weather:temperature:celsius{job=~\"$job\", placement=\"outdoor\", reference=\"true\"}, \"field\", \"temperature\", \"__name__\", \".*\")",
+                        "instant": false,
+                        "legendFormat": "{{field}}",
+                        "range": true
+                      }
+                    },
+                    "refId": "A",
+                    "hidden": false
+                  }
+                },
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "prometheus",
+                      "version": "v0",
+                      "datasource": {
+                        "name": "prometheus"
+                      },
+                      "spec": {
+                        "editorMode": "code",
+                        "expr": "label_replace(\n  log10(\n    weather:illuminance:lux{job=~\"$job\", placement=\"outdoor\", reference=\"true\"} + 1\n  ),\n  \"field\", \"illuminance\", \"job\", \".*\"\n)",
+                        "instant": false,
+                        "legendFormat": "illuminance",
+                        "range": true
+                      }
+                    },
+                    "refId": "B",
+                    "hidden": false
+                  }
+                },
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "prometheus",
+                      "version": "v0",
+                      "datasource": {
+                        "name": "prometheus"
+                      },
+                      "spec": {
+                        "editorMode": "code",
+                        "expr": "label_replace(weather:relative_humidity:percent{job=~\"$job\", placement=~\"outdoor\", reference=\"true\"}, \"field\", \"humidity\", \"__name__\", \".*\")",
+                        "instant": false,
+                        "legendFormat": "{{field}}",
+                        "range": true
+                      }
+                    },
+                    "refId": "C",
+                    "hidden": false
+                  }
+                }
+              ],
+              "transformations": [
+                {
+                  "kind": "Transformation",
+                  "group": "prepareTimeSeries",
+                  "spec": {
+                    "options": {
+                      "format": "wide"
+                    }
+                  }
+                }
+              ],
+              "queryOptions": {}
+            }
+          },
+          "vizConfig": {
+            "kind": "VizConfig",
+            "group": "xychart",
+            "version": "13.0.1",
+            "spec": {
+              "options": {
+                "legend": {
+                  "calcs": [],
+                  "displayMode": "list",
+                  "placement": "bottom",
+                  "showLegend": false
+                },
+                "mapping": "manual",
+                "series": [
+                  {
+                    "color": {
+                      "matcher": {
+                        "id": "byName",
+                        "options": "illuminance"
+                      }
+                    },
+                    "frame": {
+                      "matcher": {
+                        "id": "byIndex",
+                        "options": 0
+                      }
+                    },
+                    "x": {
+                      "matcher": {
+                        "id": "byName",
+                        "options": "temperature"
+                      }
+                    },
+                    "y": {
+                      "matcher": {
+                        "id": "byName",
+                        "options": "humidity"
+                      }
+                    }
+                  }
+                ],
+                "tooltip": {
+                  "hideZeros": false,
+                  "mode": "single",
+                  "sort": "none"
+                }
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "value": 0,
+                        "color": "purple"
+                      },
+                      {
+                        "value": 1,
+                        "color": "blue"
+                      },
+                      {
+                        "value": 2,
+                        "color": "yellow"
+                      },
+                      {
+                        "value": 3,
+                        "color": "orange"
+                      },
+                      {
+                        "value": 4,
+                        "color": "red"
+                      }
+                    ]
+                  },
+                  "color": {
+                    "mode": "thresholds",
+                    "seriesBy": "last"
+                  },
+                  "custom": {
+                    "axisBorderShow": false,
+                    "axisCenteredZero": false,
+                    "axisColorMode": "text",
+                    "axisLabel": "",
+                    "axisPlacement": "auto",
+                    "fillOpacity": 62,
+                    "hideFrom": {
+                      "legend": false,
+                      "tooltip": false,
+                      "viz": false
+                    },
+                    "lineStyle": {
+                      "fill": "solid"
+                    },
+                    "pointShape": "circle",
+                    "pointSize": {
+                      "fixed": 2
+                    },
+                    "pointStrokeWidth": 0,
+                    "scaleDistribution": {
+                      "type": "linear"
+                    },
+                    "show": "points"
+                  },
+                  "fieldMinMax": false
+                },
+                "overrides": []
+              }
+            }
+          }
+        }
+      },
+      "panel-70": {
+        "kind": "Panel",
+        "spec": {
+          "id": 70,
+          "title": "Temperature now",
+          "description": "",
+          "links": [],
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "prometheus",
+                      "version": "v0",
+                      "datasource": {
+                        "name": "prometheus"
+                      },
+                      "spec": {
+                        "editorMode": "code",
+                        "exemplar": false,
+                        "expr": "weather:temperature:celsius{job=~\"$job\", placement=\"outdoor\"}",
+                        "instant": true,
+                        "legendFormat": "temperature",
+                        "range": false
+                      }
+                    },
+                    "refId": "A",
+                    "hidden": false
+                  }
+                }
+              ],
+              "transformations": [],
+              "queryOptions": {}
+            }
+          },
+          "vizConfig": {
+            "kind": "VizConfig",
+            "group": "stat",
+            "version": "13.0.1",
+            "spec": {
+              "options": {
+                "colorMode": "value",
+                "graphMode": "area",
+                "justifyMode": "auto",
+                "orientation": "vertical",
+                "percentChangeColorMode": "standard",
+                "reduceOptions": {
+                  "calcs": [
+                    "lastNotNull"
+                  ],
+                  "fields": "",
+                  "values": false
+                },
+                "showPercentChange": false,
+                "textMode": "auto",
+                "wideLayout": true
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "unit": "celsius",
+                  "decimals": 1,
+                  "min": -10,
+                  "max": 30,
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "value": 0,
+                        "color": "purple"
+                      },
+                      {
+                        "value": 0,
+                        "color": "blue"
+                      },
+                      {
+                        "value": 10,
+                        "color": "super-light-yellow"
+                      },
+                      {
+                        "value": 15,
+                        "color": "orange"
+                      },
+                      {
+                        "value": 18,
+                        "color": "green"
+                      },
+                      {
+                        "value": 26,
+                        "color": "red"
+                      }
+                    ]
+                  },
+                  "color": {
+                    "mode": "thresholds"
+                  },
+                  "noValue": "-"
+                },
+                "overrides": []
+              }
+            }
+          }
+        }
+      },
+      "panel-71": {
+        "kind": "Panel",
+        "spec": {
+          "id": 71,
+          "title": "Dew point now",
+          "description": "",
+          "links": [],
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "prometheus",
+                      "version": "v0",
+                      "datasource": {
+                        "name": "prometheus"
+                      },
+                      "spec": {
+                        "editorMode": "code",
+                        "exemplar": false,
+                        "expr": "weather:dew_point:celsius{job=~\"$job\", placement=\"outdoor\", reference=\"true\"}",
+                        "instant": true,
+                        "legendFormat": "{{placement}}",
+                        "range": false
+                      }
+                    },
+                    "refId": "A",
+                    "hidden": false
+                  }
+                }
+              ],
+              "transformations": [],
+              "queryOptions": {}
+            }
+          },
+          "vizConfig": {
+            "kind": "VizConfig",
+            "group": "stat",
+            "version": "13.0.1",
+            "spec": {
+              "options": {
+                "colorMode": "value",
+                "graphMode": "area",
+                "justifyMode": "auto",
+                "orientation": "vertical",
+                "percentChangeColorMode": "standard",
+                "reduceOptions": {
+                  "calcs": [
+                    "lastNotNull"
+                  ],
+                  "fields": "",
+                  "values": false
+                },
+                "showPercentChange": false,
+                "textMode": "auto",
+                "wideLayout": true
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "unit": "celsius",
+                  "decimals": 1,
+                  "min": 0,
+                  "max": 20,
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "value": 0,
+                        "color": "green"
+                      },
+                      {
+                        "value": 13,
+                        "color": "light-blue"
+                      },
+                      {
+                        "value": 18,
+                        "color": "orange"
+                      },
+                      {
+                        "value": 21,
+                        "color": "light-red"
+                      }
+                    ]
+                  },
+                  "color": {
+                    "mode": "thresholds"
+                  },
+                  "noValue": "-"
+                },
+                "overrides": []
+              }
+            }
+          }
+        }
+      },
+      "panel-73": {
+        "kind": "Panel",
+        "spec": {
+          "id": 73,
+          "title": "Light exposure today",
+          "description": "",
+          "links": [],
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "prometheus",
+                      "version": "v0",
+                      "datasource": {
+                        "name": "prometheus"
+                      },
+                      "spec": {
+                        "editorMode": "code",
+                        "exemplar": false,
+                        "expr": "sum_over_time(\n  weather:illuminance:lux{job=~\"$job\", placement=\"outdoor\", reference=\"true\"}[$__range]\n) / 60",
+                        "instant": true,
+                        "legendFormat": "{{placement}}",
+                        "range": false
+                      }
+                    },
+                    "refId": "A",
+                    "hidden": false
+                  }
+                }
+              ],
+              "transformations": [],
+              "queryOptions": {
+                "timeFrom": "now/d"
+              }
+            }
+          },
+          "vizConfig": {
+            "kind": "VizConfig",
+            "group": "stat",
+            "version": "13.0.1",
+            "spec": {
+              "options": {
+                "colorMode": "value",
+                "graphMode": "none",
+                "justifyMode": "auto",
+                "orientation": "horizontal",
+                "percentChangeColorMode": "standard",
+                "reduceOptions": {
+                  "calcs": [
+                    "lastNotNull"
+                  ],
+                  "fields": "",
+                  "values": false
+                },
+                "showPercentChange": false,
+                "textMode": "auto",
+                "wideLayout": true
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "unit": "lux",
+                  "min": 0,
+                  "max": 100000,
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "value": 0,
+                        "color": "dark-purple"
+                      }
+                    ]
+                  },
+                  "color": {
+                    "mode": "continuous-viridis"
+                  },
+                  "noValue": "-"
+                },
+                "overrides": []
+              }
+            }
+          }
+        }
+      },
+      "panel-74": {
+        "kind": "Panel",
+        "spec": {
+          "id": 74,
+          "title": "Dew point trend",
+          "description": "",
+          "links": [],
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "prometheus",
+                      "version": "v0",
+                      "datasource": {
+                        "name": "prometheus"
+                      },
+                      "spec": {
+                        "editorMode": "code",
+                        "exemplar": false,
+                        "expr": "weather:dew_point:celsius{job=~\"$job\", placement=\"outdoor\", reference=\"true\"}",
+                        "instant": false,
+                        "legendFormat": "{{placement}}",
+                        "range": true
+                      }
+                    },
+                    "refId": "A",
+                    "hidden": false
+                  }
+                }
+              ],
+              "transformations": [],
+              "queryOptions": {}
+            }
+          },
+          "vizConfig": {
+            "kind": "VizConfig",
+            "group": "timeseries",
+            "version": "13.0.1",
+            "spec": {
+              "options": {
+                "annotations": {
+                  "clustering": -1,
+                  "multiLane": false
+                },
+                "legend": {
+                  "calcs": [],
+                  "displayMode": "list",
+                  "placement": "bottom",
+                  "showLegend": false
+                },
+                "tooltip": {
+                  "hideZeros": false,
+                  "mode": "single",
+                  "sort": "none"
+                }
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "unit": "celsius",
+                  "decimals": 1,
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "value": 0,
+                        "color": "green"
+                      },
+                      {
+                        "value": 13,
+                        "color": "light-blue"
+                      },
+                      {
+                        "value": 18,
+                        "color": "orange"
+                      },
+                      {
+                        "value": 21,
+                        "color": "light-red"
+                      }
+                    ]
+                  },
+                  "color": {
+                    "mode": "palette-classic"
+                  },
+                  "noValue": "-",
+                  "custom": {
+                    "axisBorderShow": false,
+                    "axisCenteredZero": false,
+                    "axisColorMode": "text",
+                    "axisLabel": "",
+                    "axisPlacement": "auto",
+                    "barAlignment": 0,
+                    "barWidthFactor": 0.6,
+                    "drawStyle": "line",
+                    "fillOpacity": 46,
+                    "gradientMode": "opacity",
+                    "hideFrom": {
+                      "legend": false,
+                      "tooltip": false,
+                      "viz": false
+                    },
+                    "insertNulls": false,
+                    "lineInterpolation": "linear",
+                    "lineWidth": 1,
+                    "pointSize": 5,
+                    "scaleDistribution": {
+                      "type": "linear"
+                    },
+                    "showPoints": "auto",
+                    "showValues": false,
+                    "spanNulls": false,
+                    "stacking": {
+                      "group": "A",
+                      "mode": "none"
+                    },
+                    "thresholdsStyle": {
+                      "mode": "off"
+                    }
+                  }
+                },
+                "overrides": []
+              }
+            }
+          }
+        }
+      },
+      "panel-75": {
+        "kind": "Panel",
+        "spec": {
+          "id": 75,
+          "title": "Temperature trend",
+          "description": "Average temperature from the previous 60-second aggregation bucket.",
+          "links": [],
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "prometheus",
+                      "version": "v0",
+                      "datasource": {
+                        "name": "prometheus"
+                      },
+                      "spec": {
+                        "editorMode": "code",
+                        "exemplar": false,
+                        "expr": "weather:temperature:celsius{job=~\"$job\", placement=\"outdoor\"}",
+                        "instant": false,
+                        "interval": "",
+                        "legendFormat": "temperature",
+                        "range": true
+                      }
+                    },
+                    "refId": "A",
+                    "hidden": false
+                  }
+                }
+              ],
+              "transformations": [],
+              "queryOptions": {}
+            }
+          },
+          "vizConfig": {
+            "kind": "VizConfig",
+            "group": "timeseries",
+            "version": "13.0.1",
+            "spec": {
+              "options": {
+                "annotations": {
+                  "clustering": -1,
+                  "multiLane": false
+                },
+                "legend": {
+                  "calcs": [],
+                  "displayMode": "list",
+                  "placement": "bottom",
+                  "showLegend": false
+                },
+                "tooltip": {
+                  "hideZeros": false,
+                  "mode": "single",
+                  "sort": "none"
+                }
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "unit": "celsius",
+                  "decimals": 1,
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "value": 0,
+                        "color": "green"
+                      },
+                      {
+                        "value": 13,
+                        "color": "light-blue"
+                      },
+                      {
+                        "value": 18,
+                        "color": "orange"
+                      },
+                      {
+                        "value": 21,
+                        "color": "light-red"
+                      }
+                    ]
+                  },
+                  "color": {
+                    "mode": "palette-classic"
+                  },
+                  "noValue": "-",
+                  "custom": {
+                    "axisBorderShow": false,
+                    "axisCenteredZero": false,
+                    "axisColorMode": "text",
+                    "axisLabel": "",
+                    "axisPlacement": "auto",
+                    "barAlignment": 0,
+                    "barWidthFactor": 0.6,
+                    "drawStyle": "line",
+                    "fillOpacity": 46,
+                    "gradientMode": "opacity",
+                    "hideFrom": {
+                      "legend": false,
+                      "tooltip": false,
+                      "viz": false
+                    },
+                    "insertNulls": false,
+                    "lineInterpolation": "linear",
+                    "lineWidth": 1,
+                    "pointSize": 5,
+                    "scaleDistribution": {
+                      "type": "linear"
+                    },
+                    "showPoints": "auto",
+                    "showValues": false,
+                    "spanNulls": false,
+                    "stacking": {
+                      "group": "A",
+                      "mode": "none"
+                    },
+                    "thresholdsStyle": {
+                      "mode": "off"
+                    }
+                  }
+                },
+                "overrides": []
+              }
+            }
+          }
+        }
+      },
+      "panel-76": {
+        "kind": "Panel",
+        "spec": {
+          "id": 76,
+          "title": "Illuminance trend",
+          "description": "",
+          "links": [],
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "prometheus",
+                      "version": "v0",
+                      "datasource": {
+                        "name": "prometheus"
+                      },
+                      "spec": {
+                        "editorMode": "code",
+                        "exemplar": false,
+                        "expr": "avg_over_time(weather:illuminance:lux{job=~\"$job\",  placement=\"outdoor\", reference=\"true\"}[15m])",
+                        "instant": false,
+                        "interval": "",
+                        "legendFormat": "illuminance",
+                        "range": true
+                      }
+                    },
+                    "refId": "A",
+                    "hidden": false
+                  }
+                }
+              ],
+              "transformations": [],
+              "queryOptions": {}
+            }
+          },
+          "vizConfig": {
+            "kind": "VizConfig",
+            "group": "timeseries",
+            "version": "13.0.1",
+            "spec": {
+              "options": {
+                "annotations": {
+                  "clustering": -1,
+                  "multiLane": false
+                },
+                "legend": {
+                  "calcs": [],
+                  "displayMode": "list",
+                  "placement": "bottom",
+                  "showLegend": false
+                },
+                "tooltip": {
+                  "hideZeros": false,
+                  "mode": "single",
+                  "sort": "none"
+                }
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "unit": "lux",
+                  "decimals": 1,
+                  "min": 0,
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "value": 0,
+                        "color": "green"
+                      }
+                    ]
+                  },
+                  "color": {
+                    "mode": "thresholds"
+                  },
+                  "noValue": "-",
+                  "custom": {
+                    "axisBorderShow": false,
+                    "axisCenteredZero": false,
+                    "axisColorMode": "text",
+                    "axisLabel": "",
+                    "axisPlacement": "auto",
+                    "axisSoftMax": 10000,
+                    "axisSoftMin": 0,
+                    "barAlignment": 0,
+                    "barWidthFactor": 0.6,
+                    "drawStyle": "line",
+                    "fillOpacity": 46,
+                    "gradientMode": "opacity",
+                    "hideFrom": {
+                      "legend": false,
+                      "tooltip": false,
+                      "viz": false
+                    },
+                    "insertNulls": false,
+                    "lineInterpolation": "linear",
+                    "lineWidth": 1,
+                    "pointSize": 5,
+                    "scaleDistribution": {
+                      "log": 10,
+                      "type": "symlog"
+                    },
+                    "showPoints": "auto",
+                    "showValues": false,
+                    "spanNulls": false,
+                    "stacking": {
+                      "group": "A",
+                      "mode": "none"
+                    },
+                    "thresholdsStyle": {
+                      "mode": "off"
+                    }
+                  }
+                },
+                "overrides": []
+              }
+            }
+          }
+        }
+      },
+      "panel-77": {
+        "kind": "Panel",
+        "spec": {
+          "id": 77,
+          "title": "Dew point spread trend",
+          "description": "",
+          "links": [],
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "prometheus",
+                      "version": "v0",
+                      "datasource": {
+                        "name": "prometheus"
+                      },
+                      "spec": {
+                        "editorMode": "code",
+                        "exemplar": false,
+                        "expr": "weather:dew_point_spread:celsius{job=~\"$job\", placement=\"outdoor\", reference=\"true\"}",
+                        "instant": false,
+                        "interval": "",
+                        "legendFormat": "{{placement}}",
+                        "range": true
+                      }
+                    },
+                    "refId": "A",
+                    "hidden": false
+                  }
+                }
+              ],
+              "transformations": [],
+              "queryOptions": {}
+            }
+          },
+          "vizConfig": {
+            "kind": "VizConfig",
+            "group": "timeseries",
+            "version": "13.0.1",
+            "spec": {
+              "options": {
+                "annotations": {
+                  "clustering": -1,
+                  "multiLane": false
+                },
+                "legend": {
+                  "calcs": [],
+                  "displayMode": "list",
+                  "placement": "bottom",
+                  "showLegend": false
+                },
+                "tooltip": {
+                  "hideZeros": false,
+                  "mode": "single",
+                  "sort": "none"
+                }
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "unit": "celsius",
+                  "decimals": 1,
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "value": 0,
+                        "color": "red"
+                      },
+                      {
+                        "value": 2,
+                        "color": "orange"
+                      },
+                      {
+                        "value": 4,
+                        "color": "yellow"
+                      },
+                      {
+                        "value": 6,
+                        "color": "green"
+                      }
+                    ]
+                  },
+                  "color": {
+                    "mode": "palette-classic"
+                  },
+                  "noValue": "-",
+                  "custom": {
+                    "axisBorderShow": false,
+                    "axisCenteredZero": false,
+                    "axisColorMode": "text",
+                    "axisLabel": "",
+                    "axisPlacement": "auto",
+                    "barAlignment": 0,
+                    "barWidthFactor": 0.6,
+                    "drawStyle": "line",
+                    "fillOpacity": 0,
+                    "gradientMode": "opacity",
+                    "hideFrom": {
+                      "legend": false,
+                      "tooltip": false,
+                      "viz": false
+                    },
+                    "insertNulls": false,
+                    "lineInterpolation": "linear",
+                    "lineWidth": 1,
+                    "pointSize": 5,
+                    "scaleDistribution": {
+                      "type": "linear"
+                    },
+                    "showPoints": "auto",
+                    "showValues": false,
+                    "spanNulls": false,
+                    "stacking": {
+                      "group": "A",
+                      "mode": "none"
+                    },
+                    "thresholdsStyle": {
+                      "mode": "off"
+                    }
+                  }
+                },
+                "overrides": []
+              }
+            }
+          }
+        }
+      },
+      "panel-78": {
+        "kind": "Panel",
+        "spec": {
+          "id": 78,
+          "title": "Dew point spread now",
+          "description": "",
+          "links": [],
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "prometheus",
+                      "version": "v0",
+                      "datasource": {
+                        "name": "prometheus"
+                      },
+                      "spec": {
+                        "editorMode": "code",
+                        "exemplar": false,
+                        "expr": "weather:dew_point_spread:celsius{job=~\"$job\", placement=\"outdoor\", reference=\"true\"}",
+                        "instant": true,
+                        "legendFormat": "{{placement}}",
+                        "range": false
+                      }
+                    },
+                    "refId": "A",
+                    "hidden": false
+                  }
+                }
+              ],
+              "transformations": [],
+              "queryOptions": {}
+            }
+          },
+          "vizConfig": {
+            "kind": "VizConfig",
+            "group": "stat",
+            "version": "13.0.1",
+            "spec": {
+              "options": {
+                "colorMode": "value",
+                "graphMode": "area",
+                "justifyMode": "auto",
+                "orientation": "vertical",
+                "percentChangeColorMode": "standard",
+                "reduceOptions": {
+                  "calcs": [
+                    "lastNotNull"
+                  ],
+                  "fields": "",
+                  "values": false
+                },
+                "showPercentChange": false,
+                "text": {},
+                "textMode": "value",
+                "wideLayout": true
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "unit": "celsius",
+                  "decimals": 1,
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "value": 0,
+                        "color": "red"
+                      },
+                      {
+                        "value": 1,
+                        "color": "orange"
+                      },
+                      {
+                        "value": 3,
+                        "color": "yellow"
+                      },
+                      {
+                        "value": 5,
+                        "color": "green"
+                      }
+                    ]
+                  },
+                  "color": {
+                    "mode": "thresholds"
+                  },
+                  "noValue": "-"
+                },
+                "overrides": []
+              }
+            }
+          }
+        }
+      },
+      "panel-79": {
+        "kind": "Panel",
+        "spec": {
+          "id": 79,
+          "title": "Temperature phase portrait",
+          "description": "",
+          "links": [],
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "prometheus",
+                      "version": "v0",
+                      "datasource": {
+                        "name": "prometheus"
+                      },
+                      "spec": {
+                        "editorMode": "code",
+                        "expr": "weather:temperature:celsius{job=~\"$job\", placement=\"outdoor\", reference=\"true\"}",
+                        "legendFormat": "temperature",
+                        "range": true
+                      }
+                    },
+                    "refId": "A",
+                    "hidden": false
+                  }
+                },
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "prometheus",
+                      "version": "v0",
+                      "datasource": {
+                        "name": "prometheus"
+                      },
+                      "spec": {
+                        "editorMode": "code",
+                        "expr": "deriv(weather:temperature:celsius{job=~\"$job\", placement=\"outdoor\", reference=\"true\"}[15m])",
+                        "instant": false,
+                        "legendFormat": "deriv",
+                        "range": true
+                      }
+                    },
+                    "refId": "B",
+                    "hidden": false
+                  }
+                },
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "prometheus",
+                      "version": "v0",
+                      "datasource": {
+                        "name": "prometheus"
+                      },
+                      "spec": {
+                        "editorMode": "code",
+                        "expr": "hour(\n  timestamp(\n    weather:temperature:celsius{job=~\"$job\", placement=\"outdoor\",  reference=\"true\"}\n  ) + 2 * 3600\n)",
+                        "instant": false,
+                        "legendFormat": "time_of_day",
+                        "range": true
+                      }
+                    },
+                    "refId": "C",
+                    "hidden": false
+                  }
+                },
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "prometheus",
+                      "version": "v0",
+                      "datasource": {
+                        "name": "prometheus"
+                      },
+                      "spec": {
+                        "editorMode": "code",
+                        "expr": "log10(\n  weather:illuminance:lux{job=~\"$job\",  placement=\"outdoor\", reference=\"true\"} + 1\n)",
+                        "instant": false,
+                        "legendFormat": "illuminance",
+                        "range": true
+                      }
+                    },
+                    "refId": "D",
+                    "hidden": false
+                  }
+                }
+              ],
+              "transformations": [
+                {
+                  "kind": "Transformation",
+                  "group": "prepareTimeSeries",
+                  "spec": {
+                    "options": {}
+                  }
+                }
+              ],
+              "queryOptions": {}
+            }
+          },
+          "vizConfig": {
+            "kind": "VizConfig",
+            "group": "xychart",
+            "version": "13.0.1",
+            "spec": {
+              "options": {
+                "legend": {
+                  "calcs": [],
+                  "displayMode": "list",
+                  "placement": "bottom",
+                  "showLegend": false
+                },
+                "mapping": "auto",
+                "series": [
+                  {
+                    "color": {
+                      "matcher": {
+                        "id": "byName",
+                        "options": "illuminance"
+                      }
+                    },
+                    "frame": {
+                      "matcher": {
+                        "id": "byIndex",
+                        "options": 0
+                      }
+                    },
+                    "x": {
+                      "matcher": {
+                        "id": "byName",
+                        "options": "temperature"
+                      }
+                    },
+                    "y": {
+                      "matcher": {
+                        "id": "byName",
+                        "options": "deriv"
+                      }
+                    }
+                  }
+                ],
+                "tooltip": {
+                  "hideZeros": false,
+                  "mode": "single",
+                  "sort": "none"
+                }
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "value": 0,
+                        "color": "green"
+                      },
+                      {
+                        "value": 80,
+                        "color": "red"
+                      }
+                    ]
+                  },
+                  "color": {
+                    "mode": "continuous-BlYlRd"
+                  },
+                  "custom": {
+                    "axisBorderShow": false,
+                    "axisCenteredZero": false,
+                    "axisColorMode": "text",
+                    "axisLabel": "",
+                    "axisPlacement": "auto",
+                    "fillOpacity": 50,
+                    "hideFrom": {
+                      "legend": false,
+                      "tooltip": false,
+                      "viz": false
+                    },
+                    "pointShape": "circle",
+                    "pointSize": {
+                      "fixed": 3
+                    },
+                    "pointStrokeWidth": 1,
+                    "scaleDistribution": {
+                      "type": "linear"
+                    },
+                    "show": "points"
+                  }
+                },
+                "overrides": []
+              }
+            }
+          }
+        }
+      },
+      "panel-80": {
+        "kind": "Panel",
+        "spec": {
+          "id": 80,
+          "title": "Humidity phase portrait",
+          "description": "",
+          "links": [],
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "prometheus",
+                      "version": "v0",
+                      "datasource": {
+                        "name": "prometheus"
+                      },
+                      "spec": {
+                        "editorMode": "code",
+                        "expr": "weather:relative_humidity:percent{job=~\"$job\", placement=\"outdoor\", reference=\"true\"}",
+                        "legendFormat": "humidity",
+                        "range": true
+                      }
+                    },
+                    "refId": "A",
+                    "hidden": false
+                  }
+                },
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "prometheus",
+                      "version": "v0",
+                      "datasource": {
+                        "name": "prometheus"
+                      },
+                      "spec": {
+                        "editorMode": "code",
+                        "expr": "deriv(weather:relative_humidity:percent{job=~\"$job\",  placement=\"outdoor\", reference=\"true\"}[15m])",
+                        "instant": false,
+                        "legendFormat": "deriv",
+                        "range": true
+                      }
+                    },
+                    "refId": "B",
+                    "hidden": false
+                  }
+                },
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "prometheus",
+                      "version": "v0",
+                      "datasource": {
+                        "name": "prometheus"
+                      },
+                      "spec": {
+                        "editorMode": "code",
+                        "expr": "hour(\n  timestamp(\n    weather:relative_humidity:percent{job=~\"$job\", placement=\"outdoor\", reference=\"true\"}\n  ) + 2 * 3600\n)",
+                        "instant": false,
+                        "legendFormat": "time_of_day",
+                        "range": true
+                      }
+                    },
+                    "refId": "C",
+                    "hidden": false
+                  }
+                },
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "prometheus",
+                      "version": "v0",
+                      "datasource": {
+                        "name": "prometheus"
+                      },
+                      "spec": {
+                        "editorMode": "code",
+                        "expr": "log10(\n  weather:pressure:hPa{job=~\"$job\", placement=\"outdoor\", reference=\"true\"} + 1\n)",
+                        "instant": false,
+                        "legendFormat": "pressure",
+                        "range": true
+                      }
+                    },
+                    "refId": "D",
+                    "hidden": false
+                  }
+                }
+              ],
+              "transformations": [
+                {
+                  "kind": "Transformation",
+                  "group": "prepareTimeSeries",
+                  "spec": {
+                    "options": {}
+                  }
+                }
+              ],
+              "queryOptions": {}
+            }
+          },
+          "vizConfig": {
+            "kind": "VizConfig",
+            "group": "xychart",
+            "version": "13.0.1",
+            "spec": {
+              "options": {
+                "legend": {
+                  "calcs": [],
+                  "displayMode": "list",
+                  "placement": "bottom",
+                  "showLegend": false
+                },
+                "mapping": "auto",
+                "series": [
+                  {
+                    "color": {
+                      "matcher": {
+                        "id": "byName",
+                        "options": "pressure"
+                      }
+                    },
+                    "frame": {
+                      "matcher": {
+                        "id": "byIndex",
+                        "options": 0
+                      }
+                    },
+                    "x": {
+                      "matcher": {
+                        "id": "byName",
+                        "options": "humidity"
+                      }
+                    },
+                    "y": {
+                      "matcher": {
+                        "id": "byName",
+                        "options": "deriv"
+                      }
+                    }
+                  }
+                ],
+                "tooltip": {
+                  "hideZeros": false,
+                  "mode": "single",
+                  "sort": "none"
+                }
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "value": 0,
+                        "color": "green"
+                      },
+                      {
+                        "value": 80,
+                        "color": "red"
+                      }
+                    ]
+                  },
+                  "color": {
+                    "mode": "continuous-BlYlRd"
+                  },
+                  "custom": {
+                    "axisBorderShow": false,
+                    "axisCenteredZero": false,
+                    "axisColorMode": "text",
+                    "axisLabel": "",
+                    "axisPlacement": "auto",
+                    "fillOpacity": 50,
+                    "hideFrom": {
+                      "legend": false,
+                      "tooltip": false,
+                      "viz": false
+                    },
+                    "pointShape": "circle",
+                    "pointSize": {
+                      "fixed": 3
+                    },
+                    "pointStrokeWidth": 1,
+                    "scaleDistribution": {
+                      "type": "linear"
+                    },
+                    "show": "points"
+                  }
+                },
+                "overrides": []
+              }
+            }
+          }
+        }
+      },
+      "panel-81": {
+        "kind": "Panel",
+        "spec": {
+          "id": 81,
+          "title": "Pressure trend",
+          "description": "Average temperature from the previous 60-second aggregation bucket.",
+          "links": [],
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "prometheus",
+                      "version": "v0",
+                      "datasource": {
+                        "name": "prometheus"
+                      },
+                      "spec": {
+                        "editorMode": "code",
+                        "exemplar": false,
+                        "expr": "weather:pressure:hPa{job=~\"$job\",  placement=\"outdoor\", reference=\"true\"}",
+                        "instant": false,
+                        "interval": "",
+                        "legendFormat": "pressure",
+                        "range": true
+                      }
+                    },
+                    "refId": "A",
+                    "hidden": false
+                  }
+                }
+              ],
+              "transformations": [],
+              "queryOptions": {}
+            }
+          },
+          "vizConfig": {
+            "kind": "VizConfig",
+            "group": "timeseries",
+            "version": "13.0.1",
+            "spec": {
+              "options": {
+                "annotations": {
+                  "clustering": -1,
+                  "multiLane": false
+                },
+                "legend": {
+                  "calcs": [],
+                  "displayMode": "list",
+                  "placement": "bottom",
+                  "showLegend": false
+                },
+                "tooltip": {
+                  "hideZeros": false,
+                  "mode": "single",
+                  "sort": "none"
+                }
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "unit": "pressurehpa",
+                  "decimals": 1,
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "value": 0,
+                        "color": "green"
+                      },
+                      {
+                        "value": 13,
+                        "color": "light-blue"
+                      },
+                      {
+                        "value": 18,
+                        "color": "orange"
+                      },
+                      {
+                        "value": 21,
+                        "color": "light-red"
+                      }
+                    ]
+                  },
+                  "color": {
+                    "mode": "palette-classic"
+                  },
+                  "noValue": "-",
+                  "custom": {
+                    "axisBorderShow": false,
+                    "axisCenteredZero": false,
+                    "axisColorMode": "text",
+                    "axisLabel": "",
+                    "axisPlacement": "auto",
+                    "barAlignment": 0,
+                    "barWidthFactor": 0.6,
+                    "drawStyle": "line",
+                    "fillOpacity": 46,
+                    "gradientMode": "opacity",
+                    "hideFrom": {
+                      "legend": false,
+                      "tooltip": false,
+                      "viz": false
+                    },
+                    "insertNulls": false,
+                    "lineInterpolation": "linear",
+                    "lineWidth": 1,
+                    "pointSize": 5,
+                    "scaleDistribution": {
+                      "type": "linear"
+                    },
+                    "showPoints": "auto",
+                    "showValues": false,
+                    "spanNulls": false,
+                    "stacking": {
+                      "group": "A",
+                      "mode": "none"
+                    },
+                    "thresholdsStyle": {
+                      "mode": "off"
+                    }
+                  }
+                },
+                "overrides": []
+              }
+            }
+          }
+        }
+      },
+      "panel-83": {
+        "kind": "Panel",
+        "spec": {
+          "id": 83,
+          "title": "Illuminance trend",
+          "description": "",
+          "links": [],
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "prometheus",
+                      "version": "v0",
+                      "datasource": {
+                        "name": "prometheus"
+                      },
+                      "spec": {
+                        "editorMode": "code",
+                        "exemplar": false,
+                        "expr": "avg_over_time(weather:illuminance:lux{job=~\"$job\",  placement=\"outdoor\", reference=\"true\"}[15m])",
+                        "instant": false,
+                        "interval": "",
+                        "legendFormat": "illuminance",
+                        "range": true
+                      }
+                    },
+                    "refId": "A",
+                    "hidden": false
+                  }
+                }
+              ],
+              "transformations": [],
+              "queryOptions": {}
+            }
+          },
+          "vizConfig": {
+            "kind": "VizConfig",
+            "group": "timeseries",
+            "version": "13.0.1",
+            "spec": {
+              "options": {
+                "annotations": {
+                  "clustering": -1,
+                  "multiLane": false
+                },
+                "legend": {
+                  "calcs": [],
+                  "displayMode": "list",
+                  "placement": "bottom",
+                  "showLegend": false
+                },
+                "tooltip": {
+                  "hideZeros": false,
+                  "mode": "single",
+                  "sort": "none"
+                }
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "unit": "lux",
+                  "decimals": 1,
+                  "min": 0,
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "value": 0,
+                        "color": "green"
+                      }
+                    ]
+                  },
+                  "color": {
+                    "mode": "thresholds"
+                  },
+                  "noValue": "-",
+                  "custom": {
+                    "axisBorderShow": false,
+                    "axisCenteredZero": false,
+                    "axisColorMode": "text",
+                    "axisLabel": "",
+                    "axisPlacement": "auto",
+                    "axisSoftMax": 10000,
+                    "axisSoftMin": 0,
+                    "barAlignment": 0,
+                    "barWidthFactor": 0.6,
+                    "drawStyle": "line",
+                    "fillOpacity": 46,
+                    "gradientMode": "opacity",
+                    "hideFrom": {
+                      "legend": false,
+                      "tooltip": false,
+                      "viz": false
+                    },
+                    "insertNulls": false,
+                    "lineInterpolation": "linear",
+                    "lineWidth": 1,
+                    "pointSize": 5,
+                    "scaleDistribution": {
+                      "log": 10,
+                      "type": "symlog"
+                    },
+                    "showPoints": "auto",
+                    "showValues": false,
+                    "spanNulls": false,
+                    "stacking": {
+                      "group": "A",
+                      "mode": "none"
+                    },
+                    "thresholdsStyle": {
+                      "mode": "off"
+                    }
+                  }
+                },
+                "overrides": []
+              }
+            }
+          }
+        }
+      },
+      "panel-84": {
+        "kind": "Panel",
+        "spec": {
+          "id": 84,
+          "title": "Carnot COP trend",
+          "description": "",
+          "links": [],
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "prometheus",
+                      "version": "v0",
+                      "datasource": {
+                        "name": "prometheus"
+                      },
+                      "spec": {
+                        "editorMode": "code",
+                        "expr": "(weather:temperature:celsius{job=~\"$job\", placement=\"indoor\", reference=\"true\"} + 273 ) \n/ on()\n(\n  (weather:temperature:celsius{job=~\"$job\", placement=\"indoor\", reference=\"true\"} \n  - on()\n  weather:temperature:celsius{job=~\"$job\",  placement=\"outdoor\", reference=\"true\"}) \n  + \n  0.001\n)",
+                        "legendFormat": "COP",
+                        "range": true
+                      }
+                    },
+                    "refId": "A",
+                    "hidden": false
+                  }
+                }
+              ],
+              "transformations": [],
+              "queryOptions": {}
+            }
+          },
+          "vizConfig": {
+            "kind": "VizConfig",
+            "group": "timeseries",
+            "version": "13.0.1",
+            "spec": {
+              "options": {
+                "annotations": {
+                  "clustering": -1,
+                  "multiLane": false
+                },
+                "legend": {
+                  "calcs": [],
+                  "displayMode": "list",
+                  "placement": "bottom",
+                  "showLegend": true
+                },
+                "tooltip": {
+                  "hideZeros": false,
+                  "mode": "single",
+                  "sort": "none"
+                }
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "value": 0,
+                        "color": "green"
+                      },
+                      {
+                        "value": 80,
+                        "color": "red"
+                      }
+                    ]
+                  },
+                  "color": {
+                    "mode": "palette-classic"
+                  },
+                  "custom": {
+                    "axisBorderShow": false,
+                    "axisCenteredZero": false,
+                    "axisColorMode": "text",
+                    "axisLabel": "",
+                    "axisPlacement": "auto",
+                    "barAlignment": 0,
+                    "barWidthFactor": 0.6,
+                    "drawStyle": "line",
+                    "fillOpacity": 0,
+                    "gradientMode": "none",
+                    "hideFrom": {
+                      "legend": false,
+                      "tooltip": false,
+                      "viz": false
+                    },
+                    "insertNulls": false,
+                    "lineInterpolation": "linear",
+                    "lineWidth": 1,
+                    "pointSize": 5,
+                    "scaleDistribution": {
+                      "type": "linear"
+                    },
+                    "showPoints": "auto",
+                    "showValues": false,
+                    "spanNulls": false,
+                    "stacking": {
+                      "group": "A",
+                      "mode": "none"
+                    },
+                    "thresholdsStyle": {
+                      "mode": "off"
+                    }
+                  }
+                },
+                "overrides": []
+              }
+            }
+          }
+        }
+      },
+      "panel-85": {
+        "kind": "Panel",
+        "spec": {
+          "id": 85,
+          "title": "COP vs outdoor temperature",
+          "description": "",
+          "links": [],
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "prometheus",
+                      "version": "v0",
+                      "datasource": {
+                        "name": "prometheus"
+                      },
+                      "spec": {
+                        "editorMode": "code",
+                        "expr": "weather:temperature:celsius{job=~\"$job\", placement=\"outdoor\", reference=\"true\"} ",
+                        "legendFormat": "temperature",
+                        "range": true
+                      }
+                    },
+                    "refId": "A",
+                    "hidden": false
+                  }
+                },
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "prometheus",
+                      "version": "v0",
+                      "datasource": {
+                        "name": "prometheus"
+                      },
+                      "spec": {
+                        "editorMode": "code",
+                        "expr": "(esp32_sensor_mean_60s{job=~\"$job\", placement=\"indoor\", reference=\"true\",  sensor=\"bme280\", field=\"temperature\"} + 273 ) \n/ on()\n(\n  (esp32_sensor_mean_60s{job=~\"$job\", placement=\"indoor\", reference=\"true\", sensor=\"bme280\", field=\"temperature\"} \n  - on()\n  esp32_sensor_mean_60s{job=~\"$job\", placement=\"outdoor\", reference=\"true\", sensor=\"bme280\", field=\"temperature\"}) \n  + \n  0.001\n)\n",
+                        "instant": false,
+                        "legendFormat": "COP",
+                        "range": true
+                      }
+                    },
+                    "refId": "B",
+                    "hidden": false
+                  }
+                },
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "prometheus",
+                      "version": "v0",
+                      "datasource": {
+                        "name": "prometheus"
+                      },
+                      "spec": {
+                        "editorMode": "code",
+                        "expr": "hour(\n  timestamp(\n    weather:temperature:celsius{job=~\"$job\", placement=\"outdoor\", reference=\"true\"}\n  )\n)",
+                        "instant": false,
+                        "legendFormat": "time_of_day",
+                        "range": true
+                      }
+                    },
+                    "refId": "C",
+                    "hidden": false
+                  }
+                }
+              ],
+              "transformations": [
+                {
+                  "kind": "Transformation",
+                  "group": "prepareTimeSeries",
+                  "spec": {
+                    "options": {}
+                  }
+                }
+              ],
+              "queryOptions": {}
+            }
+          },
+          "vizConfig": {
+            "kind": "VizConfig",
+            "group": "xychart",
+            "version": "13.0.1",
+            "spec": {
+              "options": {
+                "legend": {
+                  "calcs": [],
+                  "displayMode": "list",
+                  "placement": "bottom",
+                  "showLegend": true
+                },
+                "mapping": "manual",
+                "series": [
+                  {
+                    "color": {
+                      "matcher": {
+                        "id": "byName",
+                        "options": "time_of_day"
+                      }
+                    },
+                    "frame": {
+                      "matcher": {
+                        "id": "byIndex",
+                        "options": 0
+                      }
+                    },
+                    "x": {
+                      "matcher": {
+                        "id": "byName",
+                        "options": "temperature"
+                      }
+                    },
+                    "y": {
+                      "matcher": {
+                        "id": "byName",
+                        "options": "COP"
+                      }
+                    }
+                  }
+                ],
+                "tooltip": {
+                  "hideZeros": false,
+                  "mode": "single",
+                  "sort": "none"
+                }
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "value": 0,
+                        "color": "green"
+                      },
+                      {
+                        "value": 80,
+                        "color": "red"
+                      }
+                    ]
+                  },
+                  "color": {
+                    "mode": "continuous-BlYlRd"
+                  },
+                  "custom": {
+                    "axisBorderShow": false,
+                    "axisCenteredZero": false,
+                    "axisColorMode": "text",
+                    "axisLabel": "",
+                    "axisPlacement": "auto",
+                    "fillOpacity": 50,
+                    "hideFrom": {
+                      "legend": false,
+                      "tooltip": false,
+                      "viz": false
+                    },
+                    "pointShape": "circle",
+                    "pointSize": {
+                      "fixed": 3
+                    },
+                    "pointStrokeWidth": 1,
+                    "scaleDistribution": {
+                      "type": "linear"
+                    },
+                    "show": "points"
+                  }
+                },
+                "overrides": []
+              }
+            }
+          }
+        }
+      },
+      "panel-86": {
+        "kind": "Panel",
+        "spec": {
+          "id": 86,
+          "title": "Pressure now",
+          "description": "",
+          "links": [],
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "prometheus",
+                      "version": "v0",
+                      "datasource": {
+                        "name": "prometheus"
+                      },
+                      "spec": {
+                        "editorMode": "code",
+                        "exemplar": false,
+                        "expr": "\nweather:pressure:hPa{job=~\"$job\", placement=\"outdoor\", reference=\"true\"}\n",
+                        "instant": true,
+                        "legendFormat": "{{placement}} ",
+                        "range": false
+                      }
+                    },
+                    "refId": "A",
+                    "hidden": false
+                  }
+                }
+              ],
+              "transformations": [],
+              "queryOptions": {
+                "timeFrom": "now/d"
+              }
+            }
+          },
+          "vizConfig": {
+            "kind": "VizConfig",
+            "group": "stat",
+            "version": "13.0.1",
+            "spec": {
+              "options": {
+                "colorMode": "value",
+                "graphMode": "area",
+                "justifyMode": "auto",
+                "orientation": "horizontal",
+                "percentChangeColorMode": "standard",
+                "reduceOptions": {
+                  "calcs": [
+                    "lastNotNull"
+                  ],
+                  "fields": "",
+                  "values": false
+                },
+                "showPercentChange": false,
+                "textMode": "auto",
+                "wideLayout": true
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "unit": "pressurehpa",
+                  "min": 0,
+                  "max": 100000,
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "value": 0,
+                        "color": "dark-purple"
+                      }
+                    ]
+                  },
+                  "color": {
+                    "mode": "palette-classic"
+                  },
+                  "noValue": "-"
+                },
+                "overrides": []
+              }
+            }
+          }
+        }
+      },
+      "panel-87": {
+        "kind": "Panel",
+        "spec": {
+          "id": 87,
+          "title": "Light exposure today",
+          "description": "",
+          "links": [],
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "prometheus",
+                      "version": "v0",
+                      "datasource": {
+                        "name": "prometheus"
+                      },
+                      "spec": {
+                        "editorMode": "code",
+                        "exemplar": false,
+                        "expr": "sum_over_time(\n  weather:illuminance:lux{job=~\"$job\", placement=\"outdoor\", reference=\"true\"}[$__range]\n) / 60",
+                        "instant": true,
+                        "legendFormat": "{{placement}}",
+                        "range": false
+                      }
+                    },
+                    "refId": "A",
+                    "hidden": false
+                  }
+                }
+              ],
+              "transformations": [],
+              "queryOptions": {
+                "timeFrom": "now/d"
+              }
+            }
+          },
+          "vizConfig": {
+            "kind": "VizConfig",
+            "group": "stat",
+            "version": "13.0.1",
+            "spec": {
+              "options": {
+                "colorMode": "value",
+                "graphMode": "area",
+                "justifyMode": "auto",
+                "orientation": "horizontal",
+                "percentChangeColorMode": "standard",
+                "reduceOptions": {
+                  "calcs": [
+                    "lastNotNull"
+                  ],
+                  "fields": "",
+                  "values": false
+                },
+                "showPercentChange": false,
+                "textMode": "auto",
+                "wideLayout": true
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "unit": "lux",
+                  "min": 0,
+                  "max": 100000,
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "value": 0,
+                        "color": "dark-purple"
+                      }
+                    ]
+                  },
+                  "color": {
+                    "mode": "continuous-viridis"
+                  },
+                  "noValue": "-"
+                },
+                "overrides": []
+              }
+            }
+          }
+        }
+      },
+      "panel-88": {
+        "kind": "Panel",
+        "spec": {
+          "id": 88,
+          "title": "Absolute Humidity, gm3",
+          "description": "",
+          "links": [],
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "prometheus",
+                      "version": "v0",
+                      "datasource": {
+                        "name": "prometheus"
+                      },
+                      "spec": {
+                        "editorMode": "code",
+                        "expr": "label_replace(weather:absolute_humidity:g_m3{job=~\"$job\", placement=\"outdoor\", reference=\"true\"}, \"field\", \"humidity\", \"__name__\", \".*\")",
+                        "legendFormat": "humidity",
+                        "range": true
+                      }
+                    },
+                    "refId": "A",
+                    "hidden": false
+                  }
+                },
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "prometheus",
+                      "version": "v0",
+                      "datasource": {
+                        "name": "prometheus"
+                      },
+                      "spec": {
+                        "editorMode": "code",
+                        "expr": "label_replace(weather:temperature:celsius{job=~\"$job\", placement=\"outdoor\", reference=\"true\"}, \"field\", \"temperature\", \"__name__\", \".*\")",
+                        "instant": false,
+                        "legendFormat": "{{field}}",
+                        "range": true
+                      }
+                    },
+                    "refId": "B",
+                    "hidden": false
+                  }
+                },
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "prometheus",
+                      "version": "v0",
+                      "datasource": {
+                        "name": "prometheus"
+                      },
+                      "spec": {
+                        "editorMode": "code",
+                        "expr": "label_replace(weather:pressure:hPa{job=~\"$job\", placement=\"outdoor\", reference=\"true\"}, \"field\", \"pressure\", \"__name__\", \".*\")",
+                        "instant": false,
+                        "legendFormat": "{{field}}",
+                        "range": true
+                      }
+                    },
+                    "refId": "C",
+                    "hidden": false
+                  }
+                }
+              ],
+              "transformations": [
+                {
+                  "kind": "Transformation",
+                  "group": "prepareTimeSeries",
+                  "spec": {
+                    "options": {}
+                  }
+                }
+              ],
+              "queryOptions": {}
+            }
+          },
+          "vizConfig": {
+            "kind": "VizConfig",
+            "group": "xychart",
+            "version": "13.0.1",
+            "spec": {
+              "options": {
+                "legend": {
+                  "calcs": [],
+                  "displayMode": "list",
+                  "placement": "bottom",
+                  "showLegend": true
+                },
+                "mapping": "manual",
+                "series": [
+                  {
+                    "color": {
+                      "matcher": {
+                        "id": "byName",
+                        "options": "pressure"
+                      }
+                    },
+                    "frame": {
+                      "matcher": {
+                        "id": "byIndex",
+                        "options": 0
+                      }
+                    },
+                    "x": {
+                      "matcher": {
+                        "id": "byName",
+                        "options": "temperature"
+                      }
+                    },
+                    "y": {
+                      "matcher": {
+                        "id": "byName",
+                        "options": "humidity"
+                      }
+                    }
+                  }
+                ],
+                "tooltip": {
+                  "hideZeros": false,
+                  "mode": "single",
+                  "sort": "none"
+                }
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "value": 0,
+                        "color": "green"
+                      }
+                    ]
+                  },
+                  "color": {
+                    "mode": "continuous-BlYlRd"
+                  },
+                  "custom": {
+                    "axisBorderShow": false,
+                    "axisCenteredZero": false,
+                    "axisColorMode": "text",
+                    "axisLabel": "",
+                    "axisPlacement": "auto",
+                    "fillOpacity": 50,
+                    "hideFrom": {
+                      "legend": false,
+                      "tooltip": false,
+                      "viz": false
+                    },
+                    "pointShape": "circle",
+                    "pointSize": {
+                      "fixed": 3
+                    },
+                    "pointStrokeWidth": 1,
+                    "scaleDistribution": {
+                      "type": "linear"
+                    },
+                    "show": "points"
+                  }
+                },
+                "overrides": []
+              }
+            }
+          }
+        }
+      },
+      "panel-90": {
+        "kind": "Panel",
+        "spec": {
+          "id": 90,
+          "title": "Outdoor Air State — Temperature vs Absolute Humidity",
+          "description": "Outdoor air state plotted against psychrometric reference curves. \nHorizontal movement mostly indicates heating/cooling of the same air mass.\nVertical movement indicates moistening or drying.",
+          "links": [],
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "prometheus",
+                      "version": "v0",
+                      "datasource": {
+                        "name": "prometheus"
+                      },
+                      "spec": {
+                        "editorMode": "code",
+                        "expr": "weather:temperature:celsius{\n  job=\"weather_station\",\n  placement=\"outdoor\",\n  reference=\"true\"\n}",
+                        "legendFormat": "__auto",
+                        "range": true
+                      }
+                    },
+                    "refId": "A",
+                    "hidden": false
+                  }
+                },
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "prometheus",
+                      "version": "v0",
+                      "datasource": {
+                        "name": "prometheus"
+                      },
+                      "spec": {
+                        "editorMode": "code",
+                        "exemplar": false,
+                        "expr": "weather:absolute_humidity:g_m3{job=\"weather_station\", placement=\"outdoor\", reference=\"true\"}",
+                        "instant": false,
+                        "legendFormat": "__auto",
+                        "range": true
+                      }
+                    },
+                    "refId": "B",
+                    "hidden": false
+                  }
+                },
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "prometheus",
+                      "version": "v0",
+                      "datasource": {
+                        "name": "prometheus"
+                      },
+                      "spec": {
+                        "editorMode": "code",
+                        "expr": "avg_over_time(weather:illuminance:lux{job=\"weather_station\", reference=\"true\", placement=\"outdoor\"}[5m])",
+                        "instant": false,
+                        "legendFormat": "lux",
+                        "range": true
+                      }
+                    },
+                    "refId": "C",
+                    "hidden": false
+                  }
+                }
+              ],
+              "transformations": [],
+              "queryOptions": {}
+            }
+          },
+          "vizConfig": {
+            "kind": "VizConfig",
+            "group": "volkovlabs-echarts-panel",
+            "version": "7.2.4",
+            "spec": {
+              "options": {
+                "baidu": {
+                  "callback": "bmapReady",
+                  "key": ""
+                },
+                "editor": {
+                  "format": "auto"
+                },
+                "editorMode": "visual",
+                "gaode": {
+                  "key": "",
+                  "plugin": "AMap.Scale,AMap.ToolBar"
+                },
+                "getOption": "const series = context.panel.data.series.map((s) => {\n  const sData = s.fields.find((f) => f.type === 'number').values.buffer || s.fields.find((f) => f.type === 'number').values;\n  const sTime = s.fields.find((f) => f.type === 'time').values.buffer || s.fields.find((f) => f.type === 'time').values;\n  \n  return {\n    name: s.refId,\n    type: 'line',\n    showSymbol: false,\n    areaStyle: {\n      opacity: 0.1,\n    },\n    lineStyle: {\n      width: 1,\n    },\n    data: sData.map((d, i) => [sTime[i], d.toFixed(2)]),\n  };\n});\n\n/**\n * Enable Data Zoom by default\n */\nsetTimeout(() => context.panel.chart.dispatchAction({\n  type: 'takeGlobalCursor',\n  key: 'dataZoomSelect',\n  dataZoomSelectActive: true,\n}), 500);\n\n/**\n * Update Time Range on Zoom\n */\ncontext.panel.chart.on('datazoom', function (params) {\n  const startValue = params.batch[0]?.startValue;\n  const endValue = params.batch[0]?.endValue;\n  locationService.partial({ from: startValue, to: endValue });\n});\n\nreturn {\n  backgroundColor: 'transparent',\n  tooltip: {\n    trigger: 'axis',\n  },\n  legend: {\n    left: '0',\n    bottom: '0',\n    data: context.panel.data.series.map((s) => s.refId),\n    textStyle: {\n      color: 'rgba(128, 128, 128, .9)',\n    },\n  },\n  toolbox: {\n    feature: {\n      dataZoom: {\n        yAxisIndex: 'none',\n        icon: {\n          zoom: 'path://',\n          back: 'path://',\n        },\n      },\n      saveAsImage: {},\n    }\n  },\n  xAxis: {\n    type: 'time',\n  },\n  yAxis: {\n    type: 'value',\n    min: 'dataMin',\n  },\n  grid: {\n    left: '2%',\n    right: '2%',\n    top: '2%',\n    bottom: 24,\n    containLabel: true,\n  },\n  series,\n};",
+                "google": {
+                  "callback": "gmapReady",
+                  "key": ""
+                },
+                "map": "none",
+                "renderer": "canvas",
+                "themeEditor": {
+                  "config": "{}",
+                  "name": "default"
+                },
+                "visualEditor": {
+                  "code": "// =============================================================================\n// Psychrometric Chart — ECharts getOption for Volkov Labs Business Charts\n// Axes: Temperature (°C) x, Absolute Humidity (g/m³) y\n// Overlays: iso-RH curves (20/40/60/80/100%), iso-enthalpy diagonals\n// Live data: scatter colored by outdoor illuminance (lux)\n//\n// Required Prometheus queries (all range, not instant):\n//   A — esp32_sensor_mean_60s{..., field=\"temperature\", placement=\"outdoor\", reference=\"true\"}\n//   B — weather:absolute_humidity:g_m3{placement=\"outdoor\", reference=\"true\"}\n//   C — avg_over_time(esp32_sensor_mean_60s{..., sensor=\"bh1750\", field=\"illuminance\", placement=\"outdoor\"}[5m])\n// =============================================================================\n\n// ---------------------------------------------------------------------------\n// 1. Physics helpers\n// ---------------------------------------------------------------------------\n\n// DEBUG — paste at the very top, remove after fixing\nconsole.log('series count:', context.panel.data.series.length);\ncontext.panel.data.series.forEach((s, i) => {\n  console.log(`series[${i}] name=\"${s.name}\" refId=\"${s.refId}\" fields:`,\n    s.fields.map(f => `${f.name}(${f.type})`).join(', ')\n  );\n});\n\n// Saturation vapor pressure (hPa) via Magnus formula\nfunction satVaporPressure(T) {\n  return 6.1078 * Math.exp((17.27 * T) / (T + 237.3));\n}\n\n// Absolute humidity at saturation (g/m³) for given T\n\nfunction ahSat(T) {\n  const es = satVaporPressure(T); // hPa\n  return 216.7 * es / (T + 273.15); // g/m³\n}\n\n// Absolute humidity for given T and RH (%)\nfunction ahAtRH(T, rh) {\n  return ahSat(T) * (rh / 100);\n}\n\n// Enthalpy of moist air (kJ/kg dry air) from T (°C) and AH (g/m³)\n// AH converted to specific humidity approximation: w ≈ AH/1200 kg/kg\nfunction enthalpy(T, ah) {\n  const pressure = 1013.25; // hPa, standard pressure for background overlay\n  const vaporPressure = ah * (T + 273.15) / 216.7; // hPa\n  const w = 0.62198 * vaporPressure / (pressure - vaporPressure);\n  return 1.006 * T + w * (2501 + 1.86 * T);\n}\n\nfunction rhFromAh(T, ah) {\n  return 100 * ah / ahSat(T);\n}\n\n// ---------------------------------------------------------------------------\n// 2. Chart domain\n// ---------------------------------------------------------------------------\n\nconst T_MIN = -5;\nconst T_MAX = 35;\nconst AH_MIN = 0;\nconst AH_MAX = 30;\nconst T_STEP = 0.5; // resolution for curve sampling\n\nconst temps = [];\nfor (let t = T_MIN; t <= T_MAX; t += T_STEP) temps.push(t);\n\n// ---------------------------------------------------------------------------\n// 3. Build iso-RH curves (background series)\n// ---------------------------------------------------------------------------\n\nconst RH_LEVELS = [20, 40, 60, 80, 100];\nconst RH_COLORS = {\n  20: 'rgba(100,160,255,0.25)',\n  40: 'rgba(100,160,255,0.35)',\n  60: 'rgba(100,200,255,0.45)',\n  80: 'rgba( 80,220,200,0.50)',\n  100: 'rgba( 60,240,140,0.60)',\n};\n\nconst isoRHSeries = RH_LEVELS.map(rh => ({\n  name: `RH ${rh}%`,\n  type: 'line',\n  xAxisIndex: 0,\n  yAxisIndex: 0,\n  showSymbol: false,\n  silent: true,\n  legendHoverLink: false,\n  lineStyle: {\n    color: RH_COLORS[rh],\n    width: rh === 100 ? 2 : 1,\n    type: rh === 100 ? 'solid' : 'dashed',\n  },\n  label: {\n    show: true,\n    position: 'end',\n    formatter: `${rh}%`,\n    color: RH_COLORS[rh].replace(/[\\d.]+\\)$/, '0.85)'),\n    fontSize: 10,\n  },\n  data: temps\n    .map(t => {\n      const ah = ahAtRH(t, rh);\n      return ah >= AH_MIN && ah <= AH_MAX ? [t, parseFloat(ah.toFixed(3))] : null;\n    })\n    .filter(Boolean),\n  z: 1,\n}));\n\n// ---------------------------------------------------------------------------\n// 4. Build iso-enthalpy diagonals\n// ---------------------------------------------------------------------------\n\n// Enthalpy levels to draw (kJ/kg). Typical outdoor range for Stockholm: 0–70\nconst H_LEVELS = [0, 10, 20, 30, 40, 50, 60, 70];\n\n// For each enthalpy level h, find (T, AH) pairs where enthalpy(T, AH) = h\n// Rearranging: h = 1.006T + (AH/1000)*(2501 + 1.86T)\n// → AH = (h - 1.006T) / ((2501 + 1.86T) / 1000)\nfunction ahForEnthalpy(T, h) {\n  const denom = (2501 + 1.86 * T) / 1000;\n  return (h - 1.006 * T) / denom;\n}\n\nconst isoEnthalpySeries = H_LEVELS.map(h => ({\n  name: `h=${h}`,\n  type: 'line',\n  xAxisIndex: 0,\n  yAxisIndex: 0,\n  showSymbol: false,\n  silent: true,\n  legendHoverLink: false,\n  lineStyle: {\n    color: 'rgba(255,200,80,0.20)',\n    width: 1,\n    type: 'dotted',\n  },\n  label: {\n    show: true,\n    position: 'insideStartTop',\n    formatter: `${h} kJ`,\n    color: 'rgba(255,200,80,0.45)',\n    fontSize: 9,\n  },\n  data: temps\n    .map(t => {\n      const ah = ahForEnthalpy(t, h);\n      return ah >= AH_MIN && ah <= AH_MAX ? [t, parseFloat(ah.toFixed(3))] : null;\n    })\n    .filter(Boolean),\n  z: 1,\n}));\n\n// ---------------------------------------------------------------------------\n// 5. Extract live data from Grafana series\n// ---------------------------------------------------------------------------\n\n// Find series by legendFormat label set in query editor\nfunction getSeries(name) {\n  return context.panel.data.series.find(s => s.name === name || s.refId === name);\n}\n\nfunction getValues(s) {\n  if (!s) return [];\n  const timeField = s.fields.find(f => f.type === 'time');\n  const numField = s.fields.find(f => f.type === 'number');\n  if (!timeField || !numField) return [];\n  const times = timeField.values;\n  const values = numField.values;\n  const len = Math.min(times.length, values.length);\n  const out = [];\n  for (let i = 0; i < len; i++) out.push({ t: times[i], v: values[i] });\n  return out;\n}\n\nconst tempSeries = getSeries('temperature') || getSeries('A');\nconst ahSeries = getSeries('ah') || getSeries('B');\nconst luxSeries = getSeries('lux') || getSeries('C');\n\nconst tempPts = getValues(tempSeries);\nconst ahPts = getValues(ahSeries);\nconst luxPts = getValues(luxSeries);\n\n// Align by nearest timestamp (within 90s tolerance)\nconst TOLERANCE_MS = 90_000;\n\nfunction align(primary, secondary) {\n  return primary.map(p => {\n    const match = secondary.reduce((best, s) => {\n      const d = Math.abs(s.t - p.t);\n      return d < Math.abs((best?.t ?? Infinity) - p.t) ? s : best;\n    }, null);\n    return match && Math.abs(match.t - p.t) < TOLERANCE_MS\n      ? { t: p.t, pv: p.v, sv: match.v }\n      : null;\n  }).filter(Boolean);\n}\n\nconst aligned = align(tempPts, ahPts).map(pt => {\n  const luxMatch = luxPts.reduce((best, l) => {\n    const d = Math.abs(l.t - pt.t);\n    return d < Math.abs((best?.t ?? Infinity) - pt.t) ? l : best;\n  }, null);\n  return {\n    t: pt.t,\n    temp: pt.pv,\n    ah: pt.sv,\n    lux: luxMatch && Math.abs(luxMatch.t - pt.t) < TOLERANCE_MS ? luxMatch.v : null,\n  };\n}).filter(p => p.temp != null && p.ah != null);\n\n// ---------------------------------------------------------------------------\n// 6. Map illuminance → color (log scale: 0.1 lux → 100000 lux)\n// ---------------------------------------------------------------------------\n\nfunction luxToColor(lux) {\n  if (lux == null || lux <= 0) return 'rgba(80,80,180,0.7)';   // pre-dawn purple\n  // log-normalize to [0,1]: 0.1 lux → 0, 100000 lux → 1\n  const norm = Math.max(0, Math.min(1, Math.log10(lux + 0.1) / Math.log10(100000)));\n  // interpolate: night blue → dawn orange → noon yellow-white\n  if (norm < 0.5) {\n    // blue → orange\n    const t = norm / 0.5;\n    const r = Math.round(80 + t * (255 - 80));\n    const g = Math.round(80 + t * (160 - 80));\n    const b = Math.round(180 + t * (20 - 180));\n    return `rgba(${r},${g},${b},0.8)`;\n  } else {\n    // orange → bright yellow\n    const t = (norm - 0.5) / 0.5;\n    const r = Math.round(255);\n    const g = Math.round(160 + t * (240 - 160));\n    const b = Math.round(20 + t * (100 - 20));\n    return `rgba(${r},${g},${b},0.85)`;\n  }\n}\n\n// ---------------------------------------------------------------------------\n// 7. Live scatter series\n// ---------------------------------------------------------------------------\n\nconst scatterData = aligned.map(p => ({\n  value: [p.temp, parseFloat(p.ah.toFixed(3))],\n  itemStyle: { color: luxToColor(p.lux) },\n  // tooltip payload\n  _lux: p.lux,\n  _t: p.temp,\n  _ah: p.ah,\n}));\n\nconst scatterSeries = {\n  name: 'Outdoor air',\n  type: 'scatter',\n  xAxisIndex: 0,\n  yAxisIndex: 0,\n  symbolSize: 5,\n  data: scatterData,\n  z: 10,\n  tooltip: { show: true },\n};\n\n// ---------------------------------------------------------------------------\n// 9. Colorbar legend (manual — ECharts visualMap doesn't work well with\n//    per-point itemStyle, so we draw a simple gradient annotation)\n// ---------------------------------------------------------------------------\n\nconst colorbarGraphic = {\n  type: 'group',\n  right: 10,\n  top: 40,\n  children: [\n    {\n      type: 'rect',\n      shape: { x: 0, y: 0, width: 12, height: 120 },\n      style: {\n        fill: {\n          type: 'linear', x: 0, y: 0, x2: 0, y2: 1,\n          colorStops: [\n            { offset: 0, color: 'rgba(255,240,100,0.9)' },\n            { offset: 0.5, color: 'rgba(255,160,20,0.9)' },\n            { offset: 1, color: 'rgba(80,80,180,0.9)' },\n          ],\n        },\n      },\n    },\n    { type: 'text', style: { text: 'high lux', x: 16, y: 0, fill: 'rgba(200,200,200,0.7)', fontSize: 9 } },\n    { type: 'text', style: { text: 'low lux', x: 16, y: 112, fill: 'rgba(200,200,200,0.7)', fontSize: 9 } },\n  ],\n};\n\n// ---------------------------------------------------------------------------\n// 10. Assemble and return\n// ---------------------------------------------------------------------------\n\nreturn {\n  backgroundColor: 'transparent',\n\n  graphic: colorbarGraphic,\n\n  tooltip: {\n    trigger: 'item',\n    formatter: function (params) {\n      if (params.seriesName !== 'Outdoor air') return params.seriesName;\n      const d = params.data;\n      const lux = d._lux != null ? d._lux.toFixed(0) + ' lux' : '—';\n      const rh = rhFromAh(d._t, d._ah);\n      return [\n        '<b>Outdoor air state</b>',\n        `T: ${d._t?.toFixed(2)} °C`,\n        `AH: ${d._ah?.toFixed(2)} g/m³`,\n        `RH ≈ ${rh.toFixed(0)} %`,\n        `Illuminance: ${lux}`,\n        `Enthalpy ≈ ${enthalpy(d._t, d._ah).toFixed(1)} kJ/kg`,\n      ].join('<br/>');\n\n    },\n  },\n\n  legend: {\n    show: true,\n    bottom: 0,\n    textStyle: { color: 'rgba(180,180,180,0.8)', fontSize: 10 },\n    data: [ 'Outdoor air'],\n  },\n\n  grid: {\n    left: '8%', right: '6%', top: '6%', bottom: '12%',\n    containLabel: true,\n  },\n\n  xAxis: {\n    type: 'value',\n    name: 'Temperature (°C)',\n    nameLocation: 'middle',\n    nameGap: 28,\n    min: T_MIN,\n    max: T_MAX,\n    axisLine: { lineStyle: { color: 'rgba(180,180,180,0.4)' } },\n    splitLine: { lineStyle: { color: 'rgba(180,180,180,0.1)' } },\n    axisLabel: { color: 'rgba(180,180,180,0.7)', formatter: v => `${v}°` },\n  },\n\n  yAxis: {\n    type: 'value',\n    name: 'Absolute Humidity (g/m³)',\n    nameLocation: 'middle',\n    nameGap: 50,\n    min: AH_MIN,\n    max: AH_MAX,\n    axisLine: { lineStyle: { color: 'rgba(180,180,180,0.4)' } },\n    splitLine: { lineStyle: { color: 'rgba(180,180,180,0.1)' } },\n    axisLabel: { color: 'rgba(180,180,180,0.7)', formatter: v => `${v}` },\n  },\n\n  series: [\n    ...isoRHSeries,\n    ...isoEnthalpySeries,\n    scatterSeries,\n  ],\n};",
+                  "dataset": [],
+                  "series": []
+                }
+              },
+              "fieldConfig": {
+                "defaults": {},
+                "overrides": []
+              }
+            }
+          }
+        }
+      }
+    },
+    "layout": {
+      "kind": "TabsLayout",
+      "spec": {
+        "tabs": [
+          {
+            "kind": "TabsLayoutTab",
+            "spec": {
+              "title": "Phase Analysis",
+              "layout": {
+                "kind": "RowsLayout",
+                "spec": {
+                  "rows": [
+                    {
+                      "kind": "RowsLayoutRow",
+                      "spec": {
+                        "title": "Dew Point & Saturation",
+                        "collapse": false,
+                        "layout": {
+                          "kind": "GridLayout",
+                          "spec": {
+                            "items": [
+                              {
+                                "kind": "GridLayoutItem",
+                                "spec": {
+                                  "x": 0,
+                                  "y": 0,
+                                  "width": 12,
+                                  "height": 16,
+                                  "element": {
+                                    "kind": "ElementReference",
+                                    "name": "panel-66"
+                                  }
+                                }
+                              },
+                              {
+                                "kind": "GridLayoutItem",
+                                "spec": {
+                                  "x": 12,
+                                  "y": 0,
+                                  "width": 9,
+                                  "height": 6,
+                                  "element": {
+                                    "kind": "ElementReference",
+                                    "name": "panel-75"
+                                  }
+                                }
+                              },
+                              {
+                                "kind": "GridLayoutItem",
+                                "spec": {
+                                  "x": 21,
+                                  "y": 0,
+                                  "width": 3,
+                                  "height": 6,
+                                  "element": {
+                                    "kind": "ElementReference",
+                                    "name": "panel-70"
+                                  }
+                                }
+                              },
+                              {
+                                "kind": "GridLayoutItem",
+                                "spec": {
+                                  "x": 12,
+                                  "y": 6,
+                                  "width": 9,
+                                  "height": 5,
+                                  "element": {
+                                    "kind": "ElementReference",
+                                    "name": "panel-74"
+                                  }
+                                }
+                              },
+                              {
+                                "kind": "GridLayoutItem",
+                                "spec": {
+                                  "x": 21,
+                                  "y": 6,
+                                  "width": 3,
+                                  "height": 5,
+                                  "element": {
+                                    "kind": "ElementReference",
+                                    "name": "panel-71"
+                                  }
+                                }
+                              },
+                              {
+                                "kind": "GridLayoutItem",
+                                "spec": {
+                                  "x": 12,
+                                  "y": 11,
+                                  "width": 9,
+                                  "height": 5,
+                                  "element": {
+                                    "kind": "ElementReference",
+                                    "name": "panel-77"
+                                  }
+                                }
+                              },
+                              {
+                                "kind": "GridLayoutItem",
+                                "spec": {
+                                  "x": 21,
+                                  "y": 11,
+                                  "width": 3,
+                                  "height": 5,
+                                  "element": {
+                                    "kind": "ElementReference",
+                                    "name": "panel-78"
+                                  }
+                                }
+                              }
+                            ]
+                          }
+                        }
+                      }
+                    },
+                    {
+                      "kind": "RowsLayoutRow",
+                      "spec": {
+                        "title": "Humidity & Light Coupling",
+                        "collapse": false,
+                        "layout": {
+                          "kind": "GridLayout",
+                          "spec": {
+                            "items": [
+                              {
+                                "kind": "GridLayoutItem",
+                                "spec": {
+                                  "x": 0,
+                                  "y": 0,
+                                  "width": 12,
+                                  "height": 9,
+                                  "element": {
+                                    "kind": "ElementReference",
+                                    "name": "panel-69"
+                                  }
+                                }
+                              },
+                              {
+                                "kind": "GridLayoutItem",
+                                "spec": {
+                                  "x": 12,
+                                  "y": 0,
+                                  "width": 9,
+                                  "height": 9,
+                                  "element": {
+                                    "kind": "ElementReference",
+                                    "name": "panel-76"
+                                  }
+                                }
+                              },
+                              {
+                                "kind": "GridLayoutItem",
+                                "spec": {
+                                  "x": 21,
+                                  "y": 0,
+                                  "width": 3,
+                                  "height": 9,
+                                  "element": {
+                                    "kind": "ElementReference",
+                                    "name": "panel-73"
+                                  }
+                                }
+                              },
+                              {
+                                "kind": "GridLayoutItem",
+                                "spec": {
+                                  "x": 0,
+                                  "y": 9,
+                                  "width": 12,
+                                  "height": 9,
+                                  "element": {
+                                    "kind": "ElementReference",
+                                    "name": "panel-80"
+                                  }
+                                }
+                              },
+                              {
+                                "kind": "GridLayoutItem",
+                                "spec": {
+                                  "x": 12,
+                                  "y": 9,
+                                  "width": 9,
+                                  "height": 9,
+                                  "element": {
+                                    "kind": "ElementReference",
+                                    "name": "panel-81"
+                                  }
+                                }
+                              },
+                              {
+                                "kind": "GridLayoutItem",
+                                "spec": {
+                                  "x": 21,
+                                  "y": 9,
+                                  "width": 3,
+                                  "height": 9,
+                                  "element": {
+                                    "kind": "ElementReference",
+                                    "name": "panel-86"
+                                  }
+                                }
+                              },
+                              {
+                                "kind": "GridLayoutItem",
+                                "spec": {
+                                  "x": 0,
+                                  "y": 18,
+                                  "width": 12,
+                                  "height": 8,
+                                  "element": {
+                                    "kind": "ElementReference",
+                                    "name": "panel-88"
+                                  }
+                                }
+                              },
+                              {
+                                "kind": "GridLayoutItem",
+                                "spec": {
+                                  "x": 12,
+                                  "y": 18,
+                                  "width": 12,
+                                  "height": 8,
+                                  "element": {
+                                    "kind": "ElementReference",
+                                    "name": "panel-90"
+                                  }
+                                }
+                              }
+                            ]
+                          }
+                        }
+                      }
+                    },
+                    {
+                      "kind": "RowsLayoutRow",
+                      "spec": {
+                        "title": "Temperature Phase Portraits",
+                        "collapse": false,
+                        "layout": {
+                          "kind": "GridLayout",
+                          "spec": {
+                            "items": [
+                              {
+                                "kind": "GridLayoutItem",
+                                "spec": {
+                                  "x": 0,
+                                  "y": 0,
+                                  "width": 12,
+                                  "height": 10,
+                                  "element": {
+                                    "kind": "ElementReference",
+                                    "name": "panel-79"
+                                  }
+                                }
+                              },
+                              {
+                                "kind": "GridLayoutItem",
+                                "spec": {
+                                  "x": 12,
+                                  "y": 0,
+                                  "width": 9,
+                                  "height": 10,
+                                  "element": {
+                                    "kind": "ElementReference",
+                                    "name": "panel-83"
+                                  }
+                                }
+                              },
+                              {
+                                "kind": "GridLayoutItem",
+                                "spec": {
+                                  "x": 21,
+                                  "y": 0,
+                                  "width": 3,
+                                  "height": 10,
+                                  "element": {
+                                    "kind": "ElementReference",
+                                    "name": "panel-87"
+                                  }
+                                }
+                              }
+                            ]
+                          }
+                        }
+                      }
+                    },
+                    {
+                      "kind": "RowsLayoutRow",
+                      "spec": {
+                        "title": "Heat Pump COP Model",
+                        "collapse": false,
+                        "layout": {
+                          "kind": "GridLayout",
+                          "spec": {
+                            "items": [
+                              {
+                                "kind": "GridLayoutItem",
+                                "spec": {
+                                  "x": 0,
+                                  "y": 0,
+                                  "width": 12,
+                                  "height": 10,
+                                  "element": {
+                                    "kind": "ElementReference",
+                                    "name": "panel-85"
+                                  }
+                                }
+                              },
+                              {
+                                "kind": "GridLayoutItem",
+                                "spec": {
+                                  "x": 12,
+                                  "y": 0,
+                                  "width": 9,
+                                  "height": 10,
+                                  "element": {
+                                    "kind": "ElementReference",
+                                    "name": "panel-84"
+                                  }
+                                }
+                              }
+                            ]
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          {
+            "kind": "TabsLayoutTab",
+            "spec": {
+              "title": "Daily Climate Profiles",
+              "layout": {
+                "kind": "GridLayout",
+                "spec": {
+                  "items": [
+                    {
+                      "kind": "GridLayoutItem",
+                      "spec": {
+                        "x": 0,
+                        "y": 0,
+                        "width": 12,
+                        "height": 22,
+                        "element": {
+                          "kind": "ElementReference",
+                          "name": "panel-44"
+                        }
+                      }
+                    },
+                    {
+                      "kind": "GridLayoutItem",
+                      "spec": {
+                        "x": 12,
+                        "y": 0,
+                        "width": 12,
+                        "height": 22,
+                        "element": {
+                          "kind": "ElementReference",
+                          "name": "panel-55"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          {
+            "kind": "TabsLayoutTab",
+            "spec": {
+              "title": "Weather Heuristics",
+              "layout": {
+                "kind": "RowsLayout",
+                "spec": {
+                  "rows": [
+                    {
+                      "kind": "RowsLayoutRow",
+                      "spec": {
+                        "title": "Storm Risk Components",
+                        "collapse": false,
+                        "layout": {
+                          "kind": "GridLayout",
+                          "spec": {
+                            "items": [
+                              {
+                                "kind": "GridLayoutItem",
+                                "spec": {
+                                  "x": 0,
+                                  "y": 0,
+                                  "width": 24,
+                                  "height": 16,
+                                  "element": {
+                                    "kind": "ElementReference",
+                                    "name": "panel-61"
+                                  }
+                                }
+                              },
+                              {
+                                "kind": "GridLayoutItem",
+                                "spec": {
+                                  "x": 0,
+                                  "y": 16,
+                                  "width": 6,
+                                  "height": 3,
+                                  "element": {
+                                    "kind": "ElementReference",
+                                    "name": "panel-63"
+                                  }
+                                }
+                              },
+                              {
+                                "kind": "GridLayoutItem",
+                                "spec": {
+                                  "x": 6,
+                                  "y": 16,
+                                  "width": 6,
+                                  "height": 3,
+                                  "element": {
+                                    "kind": "ElementReference",
+                                    "name": "panel-64"
+                                  }
+                                }
+                              },
+                              {
+                                "kind": "GridLayoutItem",
+                                "spec": {
+                                  "x": 12,
+                                  "y": 16,
+                                  "width": 6,
+                                  "height": 3,
+                                  "element": {
+                                    "kind": "ElementReference",
+                                    "name": "panel-65"
+                                  }
+                                }
+                              },
+                              {
+                                "kind": "GridLayoutItem",
+                                "spec": {
+                                  "x": 18,
+                                  "y": 16,
+                                  "width": 6,
+                                  "height": 3,
+                                  "element": {
+                                    "kind": "ElementReference",
+                                    "name": "panel-62"
+                                  }
+                                }
+                              }
+                            ]
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
+    "links": [],
+    "liveNow": false,
+    "preload": false,
+    "tags": [
+      "aggregated",
+      "avg-60s",
+      "esp32",
+      "iot",
+      "multi-device",
+      "prometheus",
+      "weather"
+    ],
+    "timeSettings": {
+      "timezone": "browser",
+      "from": "now-24h",
+      "to": "now",
+      "autoRefresh": "1m",
+      "autoRefreshIntervals": [
+        "5s",
+        "10s",
+        "30s",
+        "1m",
+        "5m",
+        "15m",
+        "30m",
+        "1h",
+        "2h",
+        "1d"
+      ],
+      "hideTimepicker": false,
+      "fiscalYearStartMonth": 0
+    },
+    "title": "ESP32_weather",
+    "variables": [
+      {
+        "kind": "QueryVariable",
+        "spec": {
+          "name": "job",
+          "current": {
+            "text": [
+              "weather_station"
+            ],
+            "value": [
+              "weather_station"
+            ]
+          },
+          "label": "job",
+          "hide": "dontHide",
+          "refresh": "onDashboardLoad",
+          "skipUrlSync": false,
+          "query": {
+            "kind": "DataQuery",
+            "group": "prometheus",
+            "version": "v0",
+            "datasource": {
+              "name": "prometheus"
+            },
+            "spec": {
+              "qryType": 1,
+              "query": "label_values(esp32_up,job)",
+              "refId": "PrometheusVariableQueryEditor-VariableQuery"
+            }
+          },
+          "regex": "",
+          "regexApplyTo": "value",
+          "sort": "disabled",
+          "definition": "label_values(esp32_up,job)",
+          "options": [],
+          "multi": true,
+          "includeAll": false,
+          "allowCustomValue": true
+        }
+      }
+    ]
+  }
+}
