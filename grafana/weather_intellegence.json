@@ -2,23 +2,16 @@
   "apiVersion": "dashboard.grafana.app/v2",
   "kind": "Dashboard",
   "metadata": {
-    "name": "weather-observatory-revised",
+    "name": "weather-intelligence",
     "namespace": "default",
-    "uid": "b8189856-7fbb-49d0-9c30-e91f29d01e8a",
-    "resourceVersion": "1779053901384982",
-    "generation": 10,
-    "creationTimestamp": "2026-05-16T18:22:33Z",
+    "uid": "b87c24d7-a8b6-41b4-a4b1-596635c1741e",
+    "resourceVersion": "1779312577468009",
+    "generation": 2,
+    "creationTimestamp": "2026-05-20T21:22:22Z",
     "labels": {
-      "grafana.app/deprecatedInternalID": "2074115312283648"
+      "grafana.app/deprecatedInternalID": "3568918126514176"
     },
     "annotations": {
-      "grafana.app/createdBy": "user:cflqdlwxkaubkb",
-      "grafana.app/folder": "fflqdmbj7xlvkf",
-      "grafana.app/saved-from-ui": "Grafana v13.0.1 (a100054f)",
-      "grafana.app/updatedBy": "user:cflqdlwxkaubkb",
-      "grafana.app/updatedTimestamp": "2026-05-17T21:38:21Z",
-      "grafana.app/folderTitle": "Weather Station",
-      "grafana.app/folderUrl": "/dashboards/f/fflqdmbj7xlvkf/weather-station"
     }
   },
   "spec": {
@@ -2641,130 +2634,6 @@
           }
         }
       },
-      "panel-83": {
-        "kind": "Panel",
-        "spec": {
-          "id": 83,
-          "title": "Illuminance trend",
-          "description": "",
-          "links": [],
-          "data": {
-            "kind": "QueryGroup",
-            "spec": {
-              "queries": [
-                {
-                  "kind": "PanelQuery",
-                  "spec": {
-                    "query": {
-                      "kind": "DataQuery",
-                      "group": "prometheus",
-                      "version": "v0",
-                      "datasource": {
-                        "name": "prometheus"
-                      },
-                      "spec": {
-                        "editorMode": "code",
-                        "exemplar": false,
-                        "expr": "avg_over_time(weather:illuminance:lux{job=~\"$job\",  placement=\"outdoor\", reference=\"true\"}[15m])",
-                        "instant": false,
-                        "interval": "",
-                        "legendFormat": "illuminance",
-                        "range": true
-                      }
-                    },
-                    "refId": "A",
-                    "hidden": false
-                  }
-                }
-              ],
-              "transformations": [],
-              "queryOptions": {}
-            }
-          },
-          "vizConfig": {
-            "kind": "VizConfig",
-            "group": "timeseries",
-            "version": "13.0.1",
-            "spec": {
-              "options": {
-                "annotations": {
-                  "clustering": -1,
-                  "multiLane": false
-                },
-                "legend": {
-                  "calcs": [],
-                  "displayMode": "list",
-                  "placement": "bottom",
-                  "showLegend": false
-                },
-                "tooltip": {
-                  "hideZeros": false,
-                  "mode": "single",
-                  "sort": "none"
-                }
-              },
-              "fieldConfig": {
-                "defaults": {
-                  "unit": "lux",
-                  "decimals": 1,
-                  "min": 0,
-                  "thresholds": {
-                    "mode": "absolute",
-                    "steps": [
-                      {
-                        "value": 0,
-                        "color": "green"
-                      }
-                    ]
-                  },
-                  "color": {
-                    "mode": "thresholds"
-                  },
-                  "noValue": "-",
-                  "custom": {
-                    "axisBorderShow": false,
-                    "axisCenteredZero": false,
-                    "axisColorMode": "text",
-                    "axisLabel": "",
-                    "axisPlacement": "auto",
-                    "axisSoftMax": 10000,
-                    "axisSoftMin": 0,
-                    "barAlignment": 0,
-                    "barWidthFactor": 0.6,
-                    "drawStyle": "line",
-                    "fillOpacity": 46,
-                    "gradientMode": "opacity",
-                    "hideFrom": {
-                      "legend": false,
-                      "tooltip": false,
-                      "viz": false
-                    },
-                    "insertNulls": false,
-                    "lineInterpolation": "linear",
-                    "lineWidth": 1,
-                    "pointSize": 5,
-                    "scaleDistribution": {
-                      "log": 10,
-                      "type": "symlog"
-                    },
-                    "showPoints": "auto",
-                    "showValues": false,
-                    "spanNulls": false,
-                    "stacking": {
-                      "group": "A",
-                      "mode": "none"
-                    },
-                    "thresholdsStyle": {
-                      "mode": "off"
-                    }
-                  }
-                },
-                "overrides": []
-              }
-            }
-          }
-        }
-      },
       "panel-84": {
         "kind": "Panel",
         "spec": {
@@ -3154,99 +3023,11 @@
           }
         }
       },
-      "panel-87": {
-        "kind": "Panel",
-        "spec": {
-          "id": 87,
-          "title": "Light exposure today",
-          "description": "",
-          "links": [],
-          "data": {
-            "kind": "QueryGroup",
-            "spec": {
-              "queries": [
-                {
-                  "kind": "PanelQuery",
-                  "spec": {
-                    "query": {
-                      "kind": "DataQuery",
-                      "group": "prometheus",
-                      "version": "v0",
-                      "datasource": {
-                        "name": "prometheus"
-                      },
-                      "spec": {
-                        "editorMode": "code",
-                        "exemplar": false,
-                        "expr": "sum_over_time(\n  weather:illuminance:lux{job=~\"$job\", placement=\"outdoor\", reference=\"true\"}[$__range]\n) / 60",
-                        "instant": true,
-                        "legendFormat": "{{placement}}",
-                        "range": false
-                      }
-                    },
-                    "refId": "A",
-                    "hidden": false
-                  }
-                }
-              ],
-              "transformations": [],
-              "queryOptions": {
-                "timeFrom": "now/d"
-              }
-            }
-          },
-          "vizConfig": {
-            "kind": "VizConfig",
-            "group": "stat",
-            "version": "13.0.1",
-            "spec": {
-              "options": {
-                "colorMode": "value",
-                "graphMode": "area",
-                "justifyMode": "auto",
-                "orientation": "horizontal",
-                "percentChangeColorMode": "standard",
-                "reduceOptions": {
-                  "calcs": [
-                    "lastNotNull"
-                  ],
-                  "fields": "",
-                  "values": false
-                },
-                "showPercentChange": false,
-                "textMode": "auto",
-                "wideLayout": true
-              },
-              "fieldConfig": {
-                "defaults": {
-                  "unit": "lux",
-                  "min": 0,
-                  "max": 100000,
-                  "thresholds": {
-                    "mode": "absolute",
-                    "steps": [
-                      {
-                        "value": 0,
-                        "color": "dark-purple"
-                      }
-                    ]
-                  },
-                  "color": {
-                    "mode": "continuous-viridis"
-                  },
-                  "noValue": "-"
-                },
-                "overrides": []
-              }
-            }
-          }
-        }
-      },
       "panel-88": {
         "kind": "Panel",
         "spec": {
           "id": 88,
-          "title": "Absolute Humidity, gm3",
+          "title": "Temperature vs Absolute Humidity",
           "description": "",
           "links": [],
           "data": {
@@ -3545,6 +3326,212 @@
             }
           }
         }
+      },
+      "panel-91": {
+        "kind": "Panel",
+        "spec": {
+          "id": 91,
+          "title": "Outdoor Psychrometric Chart",
+          "description": "",
+          "links": [],
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "prometheus",
+                      "version": "v0",
+                      "datasource": {
+                        "name": "prometheus"
+                      },
+                      "spec": {
+                        "editorMode": "code",
+                        "expr": "weather:relative_humidity:percent{\n  job=\"weather_station\",\n  placement=\"outdoor\",\n  reference=\"true\"\n}",
+                        "legendFormat": "humidity",
+                        "range": true
+                      }
+                    },
+                    "refId": "A",
+                    "hidden": false
+                  }
+                },
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "prometheus",
+                      "version": "v0",
+                      "datasource": {
+                        "name": "prometheus"
+                      },
+                      "spec": {
+                        "editorMode": "code",
+                        "expr": "weather:temperature:celsius{\n  job=\"weather_station\",\n  placement=\"outdoor\",\n  reference=\"true\"\n}",
+                        "instant": false,
+                        "legendFormat": "temperature",
+                        "range": true
+                      }
+                    },
+                    "refId": "B",
+                    "hidden": false
+                  }
+                }
+              ],
+              "transformations": [],
+              "queryOptions": {}
+            }
+          },
+          "vizConfig": {
+            "kind": "VizConfig",
+            "group": "ventura-psychrometric-panel",
+            "version": "5.1.0",
+            "spec": {
+              "options": {
+                "altitude": 0,
+                "count": 1,
+                "dbMax": 30,
+                "dbMin": 0,
+                "dpMax": 20,
+                "major": {
+                  "humRat": 10,
+                  "relHum": 10,
+                  "temp": 5
+                },
+                "mollier": false,
+                "regions": [],
+                "series": {
+                  "0": {
+                    "advanced": false,
+                    "dryBulb": "temperature",
+                    "gradient": "Plasma",
+                    "line": true,
+                    "measurement": "dbrh",
+                    "other": "humidity",
+                    "pointRadius": 2,
+                    "relHumType": "percent",
+                    "seriesName": "humidity"
+                  }
+                },
+                "showAxisNames": true,
+                "showLegend": false,
+                "unitSystem": "SI"
+              },
+              "fieldConfig": {
+                "defaults": {},
+                "overrides": []
+              }
+            }
+          }
+        }
+      },
+      "panel-95": {
+        "kind": "Panel",
+        "spec": {
+          "id": 95,
+          "title": "Indoor Psychrometric Chart",
+          "description": "",
+          "links": [],
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "prometheus",
+                      "version": "v0",
+                      "datasource": {
+                        "name": "prometheus"
+                      },
+                      "spec": {
+                        "editorMode": "code",
+                        "expr": "weather:relative_humidity:percent{\n  job=\"weather_station\",\n  placement=\"indoor\",\n  reference=\"true\"\n}",
+                        "legendFormat": "humidity",
+                        "range": true
+                      }
+                    },
+                    "refId": "A",
+                    "hidden": false
+                  }
+                },
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "prometheus",
+                      "version": "v0",
+                      "datasource": {
+                        "name": "prometheus"
+                      },
+                      "spec": {
+                        "editorMode": "code",
+                        "expr": "weather:temperature:celsius{\n  job=\"weather_station\",\n  placement=\"indoor\",\n  reference=\"true\"\n}",
+                        "instant": false,
+                        "legendFormat": "temperature",
+                        "range": true
+                      }
+                    },
+                    "refId": "B",
+                    "hidden": false
+                  }
+                }
+              ],
+              "transformations": [],
+              "queryOptions": {}
+            }
+          },
+          "vizConfig": {
+            "kind": "VizConfig",
+            "group": "ventura-psychrometric-panel",
+            "version": "5.1.0",
+            "spec": {
+              "options": {
+                "altitude": 0,
+                "count": 1,
+                "dbMax": 30,
+                "dbMin": 10,
+                "dpMax": 20,
+                "major": {
+                  "humRat": 10,
+                  "relHum": 10,
+                  "temp": 5
+                },
+                "mollier": false,
+                "regions": [
+                  "Summer (sitting)"
+                ],
+                "series": {
+                  "0": {
+                    "advanced": false,
+                    "dryBulb": "temperature",
+                    "gradient": "Plasma",
+                    "line": true,
+                    "measurement": "dbrh",
+                    "other": "humidity",
+                    "pointRadius": 2,
+                    "relHumType": "percent",
+                    "seriesName": "humidity"
+                  }
+                },
+                "showAxisNames": true,
+                "showLegend": false,
+                "unitSystem": "SI"
+              },
+              "fieldConfig": {
+                "defaults": {},
+                "overrides": []
+              }
+            }
+          }
+        }
       }
     },
     "layout": {
@@ -3554,7 +3541,7 @@
           {
             "kind": "TabsLayoutTab",
             "spec": {
-              "title": "Phase Analysis",
+              "title": "Overview",
               "layout": {
                 "kind": "RowsLayout",
                 "spec": {
@@ -3562,7 +3549,7 @@
                     {
                       "kind": "RowsLayoutRow",
                       "spec": {
-                        "title": "Dew Point & Saturation",
+                        "title": "Outdoor Snapshot",
                         "collapse": false,
                         "layout": {
                           "kind": "GridLayout",
@@ -3573,34 +3560,8 @@
                                 "spec": {
                                   "x": 0,
                                   "y": 0,
-                                  "width": 12,
-                                  "height": 16,
-                                  "element": {
-                                    "kind": "ElementReference",
-                                    "name": "panel-66"
-                                  }
-                                }
-                              },
-                              {
-                                "kind": "GridLayoutItem",
-                                "spec": {
-                                  "x": 12,
-                                  "y": 0,
-                                  "width": 9,
-                                  "height": 6,
-                                  "element": {
-                                    "kind": "ElementReference",
-                                    "name": "panel-75"
-                                  }
-                                }
-                              },
-                              {
-                                "kind": "GridLayoutItem",
-                                "spec": {
-                                  "x": 21,
-                                  "y": 0,
-                                  "width": 3,
-                                  "height": 6,
+                                  "width": 4,
+                                  "height": 4,
                                   "element": {
                                     "kind": "ElementReference",
                                     "name": "panel-70"
@@ -3610,23 +3571,10 @@
                               {
                                 "kind": "GridLayoutItem",
                                 "spec": {
-                                  "x": 12,
-                                  "y": 6,
-                                  "width": 9,
-                                  "height": 5,
-                                  "element": {
-                                    "kind": "ElementReference",
-                                    "name": "panel-74"
-                                  }
-                                }
-                              },
-                              {
-                                "kind": "GridLayoutItem",
-                                "spec": {
-                                  "x": 21,
-                                  "y": 6,
-                                  "width": 3,
-                                  "height": 5,
+                                  "x": 4,
+                                  "y": 0,
+                                  "width": 4,
+                                  "height": 4,
                                   "element": {
                                     "kind": "ElementReference",
                                     "name": "panel-71"
@@ -3636,26 +3584,39 @@
                               {
                                 "kind": "GridLayoutItem",
                                 "spec": {
-                                  "x": 12,
-                                  "y": 11,
-                                  "width": 9,
-                                  "height": 5,
+                                  "x": 8,
+                                  "y": 0,
+                                  "width": 4,
+                                  "height": 4,
                                   "element": {
                                     "kind": "ElementReference",
-                                    "name": "panel-77"
+                                    "name": "panel-78"
                                   }
                                 }
                               },
                               {
                                 "kind": "GridLayoutItem",
                                 "spec": {
-                                  "x": 21,
-                                  "y": 11,
-                                  "width": 3,
-                                  "height": 5,
+                                  "x": 12,
+                                  "y": 0,
+                                  "width": 4,
+                                  "height": 4,
                                   "element": {
                                     "kind": "ElementReference",
-                                    "name": "panel-78"
+                                    "name": "panel-86"
+                                  }
+                                }
+                              },
+                              {
+                                "kind": "GridLayoutItem",
+                                "spec": {
+                                  "x": 16,
+                                  "y": 0,
+                                  "width": 8,
+                                  "height": 4,
+                                  "element": {
+                                    "kind": "ElementReference",
+                                    "name": "panel-73"
                                   }
                                 }
                               }
@@ -3667,7 +3628,7 @@
                     {
                       "kind": "RowsLayoutRow",
                       "spec": {
-                        "title": "Humidity & Light Coupling",
+                        "title": "Core Trends",
                         "collapse": false,
                         "layout": {
                           "kind": "GridLayout",
@@ -3678,37 +3639,37 @@
                                 "spec": {
                                   "x": 0,
                                   "y": 0,
-                                  "width": 12,
-                                  "height": 9,
+                                  "width": 8,
+                                  "height": 7,
                                   "element": {
                                     "kind": "ElementReference",
-                                    "name": "panel-69"
+                                    "name": "panel-75"
                                   }
                                 }
                               },
                               {
                                 "kind": "GridLayoutItem",
                                 "spec": {
-                                  "x": 12,
+                                  "x": 8,
                                   "y": 0,
-                                  "width": 9,
-                                  "height": 9,
+                                  "width": 8,
+                                  "height": 7,
                                   "element": {
                                     "kind": "ElementReference",
-                                    "name": "panel-76"
+                                    "name": "panel-74"
                                   }
                                 }
                               },
                               {
                                 "kind": "GridLayoutItem",
                                 "spec": {
-                                  "x": 21,
+                                  "x": 16,
                                   "y": 0,
-                                  "width": 3,
-                                  "height": 9,
+                                  "width": 8,
+                                  "height": 7,
                                   "element": {
                                     "kind": "ElementReference",
-                                    "name": "panel-73"
+                                    "name": "panel-77"
                                   }
                                 }
                               },
@@ -3716,22 +3677,9 @@
                                 "kind": "GridLayoutItem",
                                 "spec": {
                                   "x": 0,
-                                  "y": 9,
+                                  "y": 7,
                                   "width": 12,
-                                  "height": 9,
-                                  "element": {
-                                    "kind": "ElementReference",
-                                    "name": "panel-80"
-                                  }
-                                }
-                              },
-                              {
-                                "kind": "GridLayoutItem",
-                                "spec": {
-                                  "x": 12,
-                                  "y": 9,
-                                  "width": 9,
-                                  "height": 9,
+                                  "height": 7,
                                   "element": {
                                     "kind": "ElementReference",
                                     "name": "panel-81"
@@ -3741,36 +3689,50 @@
                               {
                                 "kind": "GridLayoutItem",
                                 "spec": {
-                                  "x": 21,
-                                  "y": 9,
-                                  "width": 3,
-                                  "height": 9,
+                                  "x": 12,
+                                  "y": 7,
+                                  "width": 12,
+                                  "height": 7,
                                   "element": {
                                     "kind": "ElementReference",
-                                    "name": "panel-86"
+                                    "name": "panel-76"
                                   }
                                 }
-                              },
+                              }
+                            ]
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          {
+            "kind": "TabsLayoutTab",
+            "spec": {
+              "title": "Air State & Psychrometrics",
+              "layout": {
+                "kind": "RowsLayout",
+                "spec": {
+                  "rows": [
+                    {
+                      "kind": "RowsLayoutRow",
+                      "spec": {
+                        "title": "Outdoor Air State",
+                        "collapse": false,
+                        "layout": {
+                          "kind": "GridLayout",
+                          "spec": {
+                            "items": [
                               {
                                 "kind": "GridLayoutItem",
                                 "spec": {
                                   "x": 0,
-                                  "y": 18,
-                                  "width": 12,
-                                  "height": 8,
-                                  "element": {
-                                    "kind": "ElementReference",
-                                    "name": "panel-88"
-                                  }
-                                }
-                              },
-                              {
-                                "kind": "GridLayoutItem",
-                                "spec": {
-                                  "x": 12,
-                                  "y": 18,
-                                  "width": 12,
-                                  "height": 8,
+                                  "y": 0,
+                                  "width": 24,
+                                  "height": 16,
                                   "element": {
                                     "kind": "ElementReference",
                                     "name": "panel-90"
@@ -3785,48 +3747,30 @@
                     {
                       "kind": "RowsLayoutRow",
                       "spec": {
-                        "title": "Temperature Phase Portraits",
+                        "title": "Psychrometric Charts",
                         "collapse": false,
                         "layout": {
-                          "kind": "GridLayout",
+                          "kind": "AutoGridLayout",
                           "spec": {
+                            "maxColumnCount": 3,
+                            "columnWidthMode": "standard",
+                            "rowHeightMode": "standard",
                             "items": [
                               {
-                                "kind": "GridLayoutItem",
+                                "kind": "AutoGridLayoutItem",
                                 "spec": {
-                                  "x": 0,
-                                  "y": 0,
-                                  "width": 12,
-                                  "height": 10,
                                   "element": {
                                     "kind": "ElementReference",
-                                    "name": "panel-79"
+                                    "name": "panel-91"
                                   }
                                 }
                               },
                               {
-                                "kind": "GridLayoutItem",
+                                "kind": "AutoGridLayoutItem",
                                 "spec": {
-                                  "x": 12,
-                                  "y": 0,
-                                  "width": 9,
-                                  "height": 10,
                                   "element": {
                                     "kind": "ElementReference",
-                                    "name": "panel-83"
-                                  }
-                                }
-                              },
-                              {
-                                "kind": "GridLayoutItem",
-                                "spec": {
-                                  "x": 21,
-                                  "y": 0,
-                                  "width": 3,
-                                  "height": 10,
-                                  "element": {
-                                    "kind": "ElementReference",
-                                    "name": "panel-87"
+                                    "name": "panel-95"
                                   }
                                 }
                               }
@@ -3838,7 +3782,7 @@
                     {
                       "kind": "RowsLayoutRow",
                       "spec": {
-                        "title": "Heat Pump COP Model",
+                        "title": "Humidity Geometry",
                         "collapse": false,
                         "layout": {
                           "kind": "GridLayout",
@@ -3850,10 +3794,10 @@
                                   "x": 0,
                                   "y": 0,
                                   "width": 12,
-                                  "height": 10,
+                                  "height": 11,
                                   "element": {
                                     "kind": "ElementReference",
-                                    "name": "panel-85"
+                                    "name": "panel-66"
                                   }
                                 }
                               },
@@ -3862,11 +3806,77 @@
                                 "spec": {
                                   "x": 12,
                                   "y": 0,
-                                  "width": 9,
-                                  "height": 10,
+                                  "width": 12,
+                                  "height": 11,
                                   "element": {
                                     "kind": "ElementReference",
-                                    "name": "panel-84"
+                                    "name": "panel-88"
+                                  }
+                                }
+                              }
+                            ]
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          {
+            "kind": "TabsLayoutTab",
+            "spec": {
+              "title": "Phase Portraits",
+              "layout": {
+                "kind": "RowsLayout",
+                "spec": {
+                  "rows": [
+                    {
+                      "kind": "RowsLayoutRow",
+                      "spec": {
+                        "title": "Coupled Phase Views",
+                        "collapse": false,
+                        "layout": {
+                          "kind": "GridLayout",
+                          "spec": {
+                            "items": [
+                              {
+                                "kind": "GridLayoutItem",
+                                "spec": {
+                                  "x": 0,
+                                  "y": 0,
+                                  "width": 12,
+                                  "height": 11,
+                                  "element": {
+                                    "kind": "ElementReference",
+                                    "name": "panel-69"
+                                  }
+                                }
+                              },
+                              {
+                                "kind": "GridLayoutItem",
+                                "spec": {
+                                  "x": 12,
+                                  "y": 0,
+                                  "width": 12,
+                                  "height": 11,
+                                  "element": {
+                                    "kind": "ElementReference",
+                                    "name": "panel-79"
+                                  }
+                                }
+                              },
+                              {
+                                "kind": "GridLayoutItem",
+                                "spec": {
+                                  "x": 0,
+                                  "y": 11,
+                                  "width": 12,
+                                  "height": 11,
+                                  "element": {
+                                    "kind": "ElementReference",
+                                    "name": "panel-80"
                                   }
                                 }
                               }
@@ -3897,7 +3907,7 @@
                         "height": 22,
                         "element": {
                           "kind": "ElementReference",
-                          "name": "panel-44"
+                          "name": "panel-55"
                         }
                       }
                     },
@@ -3910,7 +3920,7 @@
                         "height": 22,
                         "element": {
                           "kind": "ElementReference",
-                          "name": "panel-55"
+                          "name": "panel-44"
                         }
                       }
                     }
@@ -3941,8 +3951,8 @@
                                 "spec": {
                                   "x": 0,
                                   "y": 0,
-                                  "width": 24,
-                                  "height": 16,
+                                  "width": 8,
+                                  "height": 12,
                                   "element": {
                                     "kind": "ElementReference",
                                     "name": "panel-61"
@@ -3952,22 +3962,9 @@
                               {
                                 "kind": "GridLayoutItem",
                                 "spec": {
-                                  "x": 0,
-                                  "y": 16,
-                                  "width": 6,
-                                  "height": 3,
-                                  "element": {
-                                    "kind": "ElementReference",
-                                    "name": "panel-63"
-                                  }
-                                }
-                              },
-                              {
-                                "kind": "GridLayoutItem",
-                                "spec": {
-                                  "x": 6,
-                                  "y": 16,
-                                  "width": 6,
+                                  "x": 8,
+                                  "y": 0,
+                                  "width": 8,
                                   "height": 3,
                                   "element": {
                                     "kind": "ElementReference",
@@ -3978,9 +3975,9 @@
                               {
                                 "kind": "GridLayoutItem",
                                 "spec": {
-                                  "x": 12,
-                                  "y": 16,
-                                  "width": 6,
+                                  "x": 16,
+                                  "y": 0,
+                                  "width": 8,
                                   "height": 3,
                                   "element": {
                                     "kind": "ElementReference",
@@ -3991,13 +3988,79 @@
                               {
                                 "kind": "GridLayoutItem",
                                 "spec": {
-                                  "x": 18,
-                                  "y": 16,
-                                  "width": 6,
+                                  "x": 8,
+                                  "y": 3,
+                                  "width": 8,
+                                  "height": 3,
+                                  "element": {
+                                    "kind": "ElementReference",
+                                    "name": "panel-63"
+                                  }
+                                }
+                              },
+                              {
+                                "kind": "GridLayoutItem",
+                                "spec": {
+                                  "x": 16,
+                                  "y": 3,
+                                  "width": 8,
                                   "height": 3,
                                   "element": {
                                     "kind": "ElementReference",
                                     "name": "panel-62"
+                                  }
+                                }
+                              }
+                            ]
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          {
+            "kind": "TabsLayoutTab",
+            "spec": {
+              "title": "Thermal Model",
+              "layout": {
+                "kind": "RowsLayout",
+                "spec": {
+                  "rows": [
+                    {
+                      "kind": "RowsLayoutRow",
+                      "spec": {
+                        "title": "Heat Pump COP Model",
+                        "collapse": false,
+                        "layout": {
+                          "kind": "GridLayout",
+                          "spec": {
+                            "items": [
+                              {
+                                "kind": "GridLayoutItem",
+                                "spec": {
+                                  "x": 0,
+                                  "y": 0,
+                                  "width": 12,
+                                  "height": 10,
+                                  "element": {
+                                    "kind": "ElementReference",
+                                    "name": "panel-85"
+                                  }
+                                }
+                              },
+                              {
+                                "kind": "GridLayoutItem",
+                                "spec": {
+                                  "x": 12,
+                                  "y": 0,
+                                  "width": 12,
+                                  "height": 10,
+                                  "element": {
+                                    "kind": "ElementReference",
+                                    "name": "panel-84"
                                   }
                                 }
                               }
@@ -4019,8 +4082,11 @@
     "preload": false,
     "tags": [
       "aggregated",
+      "analytics",
       "avg-60s",
+      "derived-metrics",
       "esp32",
+      "intelligence",
       "iot",
       "multi-device",
       "prometheus",
@@ -4046,7 +4112,7 @@
       "hideTimepicker": false,
       "fiscalYearStartMonth": 0
     },
-    "title": "ESP32_weather",
+    "title": "Weather Intelligence",
     "variables": [
       {
         "kind": "QueryVariable",
